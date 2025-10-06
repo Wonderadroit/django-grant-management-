@@ -6,7 +6,7 @@ databases:
 
 services:
   - type: web
-    name: django-grant-app
+    name: davejohnsongrant
     runtime: python
     buildCommand: "./build.sh"
     startCommand: "gunicorn --bind 0.0.0.0:$PORT --workers 4 core.wsgi:application"
