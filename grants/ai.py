@@ -1,11 +1,10 @@
 """Lightweight AI helper for grant insights.
 
-Attempts to use sentence-transformers (all-MiniLM-L6-v2) to produce an
-extractive-style summary and a simple score. If the library or model is not
-available, returns a graceful fallback message.
+Simple text analysis without external dependencies for deployment compatibility.
 """
 from typing import Dict, Optional
 import logging
+import re
 
 logger = logging.getLogger(__name__)
 
@@ -18,6 +17,45 @@ def analyze_text(text: str) -> Dict[str, Optional[str]]:
     """
     if not text:
         return {'summary': '', 'score': None, 'note': 'No text provided.'}
+
+    # Simple analysis without external dependencies
+    try:
+        # Basic text analysis
+        sentences = re.split(r'[.!?]+', text)
+        sentences = [s.strip() for s in sentences if s.strip()]
+        
+        # Simple scoring based on key words
+        impact_words = ['community', 'education', 'help', 'support', 'improve', 'benefit', 'change', 'impact']
+        score = 0.5  # baseline
+        
+        word_count = len(text.split())
+        if word_count > 50:  # Detailed application
+            score += 0.2
+        
+        for word in impact_words:
+            if word.lower() in text.lower():
+                score += 0.05
+        
+        score = min(score, 1.0)  # Cap at 1.0
+        
+        # Create simple summary (first meaningful sentence)
+        summary = sentences[0] if sentences else "Application submitted."
+        if len(summary) > 150:
+            summary = summary[:147] + "..."
+            
+        return {
+            'summary': summary,
+            'score': round(score, 2),
+            'note': 'Basic text analysis (lightweight version for deployment)'
+        }
+        
+    except Exception as e:
+        logger.warning(f"AI analysis fallback error: {e}")
+        return {
+            'summary': 'Grant application received and ready for review.',
+            'score': 0.5,
+            'note': 'Using fallback analysis due to processing limitations.'
+        }
 
     # Try to use sentence-transformers for encoding and a simple centroid heuristic
     try:

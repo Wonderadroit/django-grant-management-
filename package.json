@@ -6,7 +6,7 @@
     "lint": "eslint ."
   },
   "engines": {
-    "node": "8.11.3"
+    "node": "18.x"
   },
   "devDependencies": {
     "eslint": "5.0.0",

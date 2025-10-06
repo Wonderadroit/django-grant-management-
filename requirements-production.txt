@@ -11,4 +11,4 @@ gunicorn==21.2.0
 Pillow==10.3.0
 whitenoise==6.5.0
 psycopg2-binary==2.9.7
-sentence-transformers>=2.2.0  # Optional: For AI-powered grant analysis (downloads ~100MB model on first use)
+# sentence-transformers>=2.2.0  # Removed: Causing build issues on Render
