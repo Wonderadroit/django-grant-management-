@@ -9,7 +9,7 @@ services:
     name: django-grant-app
     runtime: python
     buildCommand: "./build.sh"
-    startCommand: "gunicorn core.wsgi:application"
+    startCommand: "gunicorn --bind 0.0.0.0:$PORT --workers 4 core.wsgi:application"
     plan: free
     envVars:
       - key: DATABASE_URL
