@@ -8,7 +8,7 @@ Unipath==1.1
 dj-database-url==2.1.0
 python-decouple==3.8
 gunicorn==21.2.0
-Pillow==10.3.0
+Pillow>=10.0.0,<11.0.0
 whitenoise==6.5.0
-psycopg2-binary==2.9.7
+psycopg2-binary>=2.9.0,<3.0.0
 # sentence-transformers>=2.2.0  # Removed: Causing build issues on Render

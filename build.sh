@@ -2,6 +2,9 @@
 # exit on error
 set -o errexit
 
+# Upgrade pip to latest version
+pip install --upgrade pip
+
 # Install Python dependencies (use production requirements for Render)
 pip install -r requirements-production.txt
 
