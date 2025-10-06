@@ -1,0 +1,123 @@
+{% extends "email/base_email.html" %}
+
+{% block title %}Grant Application Status Update{% endblock %}
+
+{% block header_title %}Application Status Update{% endblock %}
+{% block header_subtitle %}Your grant application progress{% endblock %}
+
+{% block content %}
+<div class="greeting">
+    Dear {{ application.full_name }},
+</div>
+
+<div class="message">
+    <p>We wanted to provide you with an update on your grant application with the David Johnson Foundation.</p>
+</div>
+
+<div class="info-box">
+    <h3 style="color: #667eea; margin-bottom: 15px;">📋 Application Details</h3>
+    <table style="width: 100%; border-collapse: collapse;">
+        <tr style="border-bottom: 1px solid #eee;">
+            <td style="padding: 10px 0; font-weight: 600; color: #555;">Project Name:</td>
+            <td style="padding: 10px 0;">{{ application.project_title|default:application.organization_name }}</td>
+        </tr>
+        <tr style="border-bottom: 1px solid #eee;">
+            <td style="padding: 10px 0; font-weight: 600; color: #555;">Requested Amount:</td>
+            <td style="padding: 10px 0; font-weight: 600;">${{ application.amount_requested|floatformat:0 }}</td>
+        </tr>
+        <tr style="border-bottom: 1px solid #eee;">
+            <td style="padding: 10px 0; font-weight: 600; color: #555;">Current Status:</td>
+            <td style="padding: 10px 0;">
+                {% if application.status == 'pending' %}
+                    <span class="status-badge status-pending">Pending Review</span>
+                {% elif application.status == 'under_review' %}
+                    <span class="status-badge status-review">Under Review</span>
+                {% elif application.status == 'approved' %}
+                    <span class="status-badge status-approved">Approved</span>
+                {% elif application.status == 'rejected' %}
+                    <span class="status-badge status-rejected">Not Approved</span>
+                {% else %}
+                    <span class="status-badge status-pending">{{ application.get_status_display }}</span>
+                {% endif %}
+            </td>
+        </tr>
+        <tr>
+            <td style="padding: 10px 0; font-weight: 600; color: #555;">Submitted:</td>
+            <td style="padding: 10px 0;">{{ application.created_at|date:"F d, Y" }}</td>
+        </tr>
+    </table>
+</div>
+
+{% if application.status == 'under_review' %}
+<div class="message">
+    <h3 style="color: #0c5460; margin-bottom: 15px;">🔍 Currently Under Review</h3>
+    <p>Your application is currently being reviewed by our grant committee. This process typically takes 2-4 weeks from the submission date.</p>
+    
+    <p><strong>What happens next:</strong></p>
+    <ul style="margin: 10px 0; padding-left: 30px; line-height: 2;">
+        <li>Our committee is carefully evaluating your project proposal</li>
+        <li>We may reach out if we need additional information or clarification</li>
+        <li>You'll receive notification as soon as a decision is made</li>
+        <li>Continue monitoring your dashboard for real-time updates</li>
+    </ul>
+</div>
+
+{% elif application.status == 'pending' %}
+<div class="message">
+    <h3 style="color: #856404; margin-bottom: 15px;">⏳ Application Received</h3>
+    <p>Thank you for submitting your grant application. We have received all your materials and your application is in the queue for review.</p>
+    
+    <p><strong>Timeline:</strong></p>
+    <ul style="margin: 10px 0; padding-left: 30px; line-height: 2;">
+        <li>Initial review: Within 5 business days</li>
+        <li>Committee evaluation: 2-4 weeks</li>
+        <li>Final decision notification: Within 4-6 weeks</li>
+    </ul>
+</div>
+
+{% elif application.status == 'on_hold' %}
+<div class="message">
+    <h3 style="color: #856404; margin-bottom: 15px;">⏸️ Application On Hold</h3>
+    <p>Your application is currently on hold pending additional information or documentation.</p>
+    
+    {% if application.approval_notes %}
+    <div style="background-color: #fff3cd; padding: 15px; border-radius: 5px; margin: 15px 0;">
+        <p><strong>Required Action:</strong></p>
+        <p>{{ application.approval_notes }}</p>
+    </div>
+    {% endif %}
+    
+    <p>Please log in to your dashboard to see what additional information is needed and submit the required materials as soon as possible.</p>
+</div>
+{% endif %}
+
+<div style="text-align: center; margin: 30px 0;">
+    <a href="http://127.0.0.1:8000/grants/status/" class="button">
+        Check Application Status
+    </a>
+</div>
+
+{% if application.status == 'under_review' or application.status == 'pending' %}
+<div style="background-color: #d1ecf1; border: 1px solid #bee5eb; border-radius: 10px; padding: 20px; margin: 30px 0;">
+    <h3 style="color: #0c5460; margin-bottom: 15px;">💡 While You Wait</h3>
+    <p style="color: #0c5460;">Use this time to:</p>
+    <ul style="margin: 10px 0; padding-left: 20px; line-height: 1.8; color: #0c5460;">
+        <li>Finalize your project implementation plan</li>
+        <li>Prepare additional documentation if needed</li>
+        <li>Review our success stories for inspiration</li>
+        <li>Connect with our community of grant recipients</li>
+    </ul>
+</div>
+{% endif %}
+
+<div class="message">
+    <p>We appreciate your patience during the review process. Our committee takes great care in evaluating each application to ensure we can provide the most impactful support to our community.</p>
+    
+    <p>If you have any questions or need to update your application, please don't hesitate to contact our support team.</p>
+    
+    <p>Thank you for your commitment to creating positive change in the community.</p>
+    
+    <p>Best regards,<br>
+    <strong>Dave Johnson Foundation Review Team</strong></p>
+</div>
+{% endblock %}

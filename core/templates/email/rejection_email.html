@@ -1,0 +1,101 @@
+{% extends "email/base_email.html" %}
+
+{% block title %}Grant Application Decision{% endblock %}
+
+{% block header_title %}Application Decision{% endblock %}
+{% block header_subtitle %}Thank you for your submission{% endblock %}
+
+{% block content %}
+<div class="greeting">
+    Dear {{ application.full_name }},
+</div>
+
+<div class="message">
+    <p>Thank you for submitting your grant application to the David Johnson Foundation. After careful consideration by our review committee, we regret to inform you that we are unable to approve your application at this time.</p>
+</div>
+
+<div class="info-box">
+    <h3 style="color: #721c24; margin-bottom: 15px;">📋 Application Details</h3>
+    <table style="width: 100%; border-collapse: collapse;">
+        <tr style="border-bottom: 1px solid #eee;">
+            <td style="padding: 10px 0; font-weight: 600; color: #555;">Project Name:</td>
+            <td style="padding: 10px 0;">{{ application.project_title|default:application.organization_name }}</td>
+        </tr>
+        <tr style="border-bottom: 1px solid #eee;">
+            <td style="padding: 10px 0; font-weight: 600; color: #555;">Requested Amount:</td>
+            <td style="padding: 10px 0; font-weight: 600;">${{ application.amount_requested|floatformat:0 }}</td>
+        </tr>
+        <tr style="border-bottom: 1px solid #eee;">
+            <td style="padding: 10px 0; font-weight: 600; color: #555;">Status:</td>
+            <td style="padding: 10px 0;">
+                <span class="status-badge status-rejected">Not Approved</span>
+            </td>
+        </tr>
+        <tr>
+            <td style="padding: 10px 0; font-weight: 600; color: #555;">Decision Date:</td>
+            <td style="padding: 10px 0;">{{ application.approval_date|date:"F d, Y"|default:"Today" }}</td>
+        </tr>
+    </table>
+</div>
+
+{% if application.approval_notes %}
+<div class="info-box">
+    <h3 style="color: #667eea; margin-bottom: 15px;">💬 Committee Feedback</h3>
+    <p style="font-style: italic;">{{ application.approval_notes }}</p>
+</div>
+{% endif %}
+
+<div class="message">
+    <h3 style="color: #667eea; margin-bottom: 15px;">🎯 Moving Forward</h3>
+    <p>While we cannot support your project at this time, we want to emphasize that this decision does not reflect the value of your work or your organization's mission. We receive many worthy applications, and unfortunately, our resources are limited.</p>
+    
+    <p><strong>We encourage you to:</strong></p>
+    <ul style="margin: 10px 0; padding-left: 30px; line-height: 2;">
+        <li><strong>Reapply in the future:</strong> You may submit a new application for our next review cycle</li>
+        <li><strong>Consider our feedback:</strong> Use any committee notes to strengthen future applications</li>
+        <li><strong>Explore other opportunities:</strong> We can provide information about other potential funding sources</li>
+        <li><strong>Stay connected:</strong> Join our newsletter for updates on new funding opportunities</li>
+        <li><strong>Attend our workshops:</strong> We offer free grant writing workshops throughout the year</li>
+    </ul>
+</div>
+
+<div style="background-color: #d1ecf1; border: 1px solid #bee5eb; border-radius: 10px; padding: 20px; margin: 30px 0;">
+    <h3 style="color: #0c5460; margin-bottom: 15px;">🔍 Alternative Resources</h3>
+    <p style="color: #0c5460;">While we couldn't fund your project this time, here are some alternative resources that might be helpful:</p>
+    <ul style="margin: 10px 0; padding-left: 20px; line-height: 1.8; color: #0c5460;">
+        <li><strong>Federal Grants:</strong> Grants.gov - Browse federal funding opportunities</li>
+        <li><strong>Local Foundations:</strong> Contact your local community foundation</li>
+        <li><strong>Corporate Giving:</strong> Research companies with CSR programs in your area</li>
+        <li><strong>Crowdfunding:</strong> Consider platforms like GoFundMe for community support</li>
+    </ul>
+</div>
+
+<div style="text-align: center; margin: 30px 0;">
+    <a href="http://127.0.0.1:8000/grants/apply/" class="button">
+        Apply Again in Future
+    </a>
+</div>
+
+<div style="background-color: #fff3cd; border: 1px solid #ffeaa7; border-radius: 10px; padding: 20px; margin: 30px 0;">
+    <h3 style="color: #856404; margin-bottom: 15px;">📅 Next Application Cycle</h3>
+    <p style="color: #856404;"><strong>Next Review Period:</strong> Our next application review cycle begins in 3 months. We encourage you to refine your proposal and reapply during our next funding round.</p>
+    <p style="color: #856404;"><strong>Grant Writing Workshop:</strong> We're hosting a free grant writing workshop next month. This could help strengthen your future applications.</p>
+</div>
+
+<div class="message">
+    <p>Please don't let this decision discourage you from pursuing your important work. The projects and initiatives you're working on are valuable to the community, and we hope you'll continue your efforts to create positive change.</p>
+    
+    <p>If you have any questions about this decision or would like guidance on strengthening future applications, our team is here to help.</p>
+    
+    <p>We wish you the very best in your future endeavors and hope to have the opportunity to support your work in the future.</p>
+    
+    <p>Respectfully,<br>
+    <strong>Dave Johnson Foundation Grant Committee</strong><br>
+    <em>"Supporting Community Innovation and Growth"</em></p>
+</div>
+
+<div style="text-align: center; margin: 30px 0; padding: 20px; background-color: #f8d7da; border-radius: 10px; border: 1px solid #f5c6cb;">
+    <p style="font-weight: 600; color: #721c24;">💬 Questions or Need Support?</p>
+    <p style="color: #721c24;">Email: grantdavejohnsonfoundation@gmail.com | Phone: +1 (872) 228-1570</p>
+</div>
+{% endblock %}

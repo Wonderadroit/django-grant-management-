@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+  <div class="container py-4">
+    <h2>AI Insights</h2>
+    {% if error %}
+      <div class="alert alert-warning">{{ error }}</div>
+    {% else %}
+      <div class="card mb-3">
+        <div class="card-body">
+          <h5 class="card-title">Application</h5>
+          <p><strong>Name:</strong> {{ grant.full_name }}</p>
+          <p><strong>Amount:</strong> {{ grant.amount_requested }}</p>
+          <p><strong>Created:</strong> {{ grant.created_at }}</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">AI Summary</h5>
+          <p>{{ ai.summary }}</p>
+          <p><strong>Score:</strong> {% if ai.score %}{{ ai.score }}{% else %}N/A{% endif %}</p>
+          <p class="text-muted"><small>{{ ai.note }}</small></p>
+        </div>
+      </div>
+    {% endif %}
+  </div>
+{% endblock %}

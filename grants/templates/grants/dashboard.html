@@ -1,0 +1,297 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Dashboard - David Johnson Foundation{% endblock %}
+
+{% block extra_css %}
+<style>
+    .status-card {
+        border-left: 4px solid #ddd;
+        transition: all 0.3s ease;
+    }
+    .status-approved { border-left-color: #28a745; }
+    .status-rejected { border-left-color: #dc3545; }
+    .status-under_review { border-left-color: #007bff; }
+    .status-on_hold { border-left-color: #ffc107; }
+    .status-pending { border-left-color: #6c757d; }
+    
+    .progress-circle {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        color: white;
+        font-size: 14px;
+    }
+    
+    .timeline-item {
+        border-left: 2px solid #e9ecef;
+        padding-left: 20px;
+        margin-bottom: 20px;
+        position: relative;
+    }
+    
+    .timeline-item::before {
+        content: '';
+        position: absolute;
+        left: -6px;
+        top: 5px;
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: #e9ecef;
+    }
+    
+    .timeline-item.completed::before {
+        background: #28a745;
+    }
+    
+    .timeline-item.current::before {
+        background: #007bff;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid mt-4">
+    <div class="row">
+        <div class="col-12">
+            <h1 class="h3 mb-4">🏠 Dashboard</h1>
+        </div>
+    </div>
+    
+    {% if grant %}
+        <!-- Status Overview -->
+        <div class="row mb-4">
+            <div class="col-lg-8">
+                <div class="card status-card status-{{ grant.status }} h-100">
+                    <div class="card-header bg-transparent">
+                        <h5 class="card-title mb-0">
+                            <i class="fas fa-file-alt me-2"></i>Your Grant Application
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row align-items-center">
+                            <div class="col-md-8">
+                                <h6 class="text-primary">{{ grant.project_title }}</h6>
+                                <p class="text-muted mb-2">Application ID: DJF-{{ grant.id|stringformat:"04d" }}</p>
+                                <p class="mb-1"><strong>Amount Requested:</strong> ${{ grant.amount_requested|floatformat:0 }}</p>
+                                {% if grant.approved_amount %}
+                                    <p class="mb-1 text-success"><strong>Approved Amount:</strong> ${{ grant.approved_amount|floatformat:0 }}</p>
+                                {% endif %}
+                                <p class="mb-1"><strong>Submitted:</strong> {{ grant.created_at|date:"M d, Y" }}</p>
+                                <p class="mb-3"><strong>Category:</strong> {{ grant.get_project_category_display }}</p>
+                                
+                                <!-- Status Badge -->
+                                {% if grant.status == 'approved' %}
+                                    <span class="badge bg-success fs-6 p-2">✅ APPROVED</span>
+                                {% elif grant.status == 'rejected' %}
+                                    <span class="badge bg-danger fs-6 p-2">❌ REJECTED</span>
+                                {% elif grant.status == 'under_review' %}
+                                    <span class="badge bg-primary fs-6 p-2">🔍 UNDER REVIEW</span>
+                                {% elif grant.status == 'on_hold' %}
+                                    <span class="badge bg-warning fs-6 p-2">⏸️ ON HOLD</span>
+                                {% else %}
+                                    <span class="badge bg-secondary fs-6 p-2">⏳ PENDING</span>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-4 text-center">
+                                <div class="progress-circle 
+                                    {% if grant.status == 'approved' %}bg-success
+                                    {% elif grant.status == 'rejected' %}bg-danger
+                                    {% elif grant.status == 'under_review' %}bg-primary
+                                    {% elif grant.status == 'on_hold' %}bg-warning
+                                    {% else %}bg-secondary{% endif %}">
+                                    {% if grant.status == 'approved' %}100%
+                                    {% elif grant.status == 'rejected' %}Closed
+                                    {% elif grant.status == 'under_review' %}75%
+                                    {% elif grant.status == 'on_hold' %}60%
+                                    {% else %}25%{% endif %}
+                                </div>
+                                <small class="text-muted">Progress</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-4">
+                <div class="card h-100">
+                    <div class="card-header bg-transparent">
+                        <h5 class="card-title mb-0">
+                            <i class="fas fa-clock me-2"></i>Timeline
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="timeline-item completed">
+                            <strong>Application Submitted</strong><br>
+                            <small class="text-muted">{{ grant.created_at|date:"M d, Y H:i" }}</small>
+                        </div>
+                        
+                        <div class="timeline-item {% if grant.status != 'pending' %}completed{% else %}current{% endif %}">
+                            <strong>Initial Review</strong><br>
+                            <small class="text-muted">
+                                {% if grant.status != 'pending' %}Completed{% else %}In Progress{% endif %}
+                            </small>
+                        </div>
+                        
+                        <div class="timeline-item {% if grant.status == 'approved' or grant.status == 'rejected' %}completed{% elif grant.status == 'under_review' %}current{% endif %}">
+                            <strong>Committee Review</strong><br>
+                            <small class="text-muted">
+                                {% if grant.status == 'under_review' %}In Progress
+                                {% elif grant.status == 'approved' or grant.status == 'rejected' %}Completed
+                                {% else %}Pending{% endif %}
+                            </small>
+                        </div>
+                        
+                        <div class="timeline-item {% if grant.status == 'approved' %}completed{% elif grant.status == 'rejected' %}completed{% endif %}">
+                            <strong>Final Decision</strong><br>
+                            <small class="text-muted">
+                                {% if grant.status == 'approved' %}Approved - {{ grant.approval_date|date:"M d, Y" }}
+                                {% elif grant.status == 'rejected' %}Not Selected
+                                {% else %}Pending{% endif %}
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Quick Actions -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">
+                            <i class="fas fa-bolt me-2"></i>Quick Actions
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-3 mb-2">
+                                <a href="{% url 'grants:status' %}" class="btn btn-outline-primary w-100">
+                                    <i class="fas fa-sync-alt me-2"></i>Check Status
+                                </a>
+                            </div>
+                            {% if grant.status == 'approved' %}
+                                <div class="col-md-3 mb-2">
+                                    <a href="{% url 'grants:approval' %}" class="btn btn-success w-100">
+                                        <i class="fas fa-certificate me-2"></i>Approval Letter
+                                    </a>
+                                </div>
+                            {% endif %}
+                            <div class="col-md-3 mb-2">
+                                <a href="{% url 'grants:ai_insights' %}" class="btn btn-outline-info w-100">
+                                    <i class="fas fa-robot me-2"></i>AI Insights
+                                </a>
+                            </div>
+                            <div class="col-md-3 mb-2">
+                                <a href="#" class="btn btn-outline-secondary w-100" data-bs-toggle="modal" data-bs-target="#contactModal">
+                                    <i class="fas fa-envelope me-2"></i>Contact Support
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Application Details Summary -->
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">
+                            <i class="fas fa-info-circle me-2"></i>Application Summary
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <p><strong>Applicant:</strong> {{ grant.full_name }}</p>
+                        {% if grant.organization_name %}
+                            <p><strong>Organization:</strong> {{ grant.organization_name }}</p>
+                        {% endif %}
+                        <p><strong>Project Description:</strong></p>
+                        <p class="text-muted">{{ grant.project_description|truncatewords:30 }}</p>
+                        <p><strong>Target Beneficiaries:</strong></p>
+                        <p class="text-muted">{{ grant.target_beneficiaries|truncatewords:20 }}</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">
+                            <i class="fas fa-chart-line me-2"></i>Impact Goals
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <p><strong>Project Goals:</strong></p>
+                        <p class="text-muted">{{ grant.project_goals|truncatewords:25 }}</p>
+                        <p><strong>Expected Impact:</strong></p>
+                        <p class="text-muted">{{ grant.expected_impact|truncatewords:25 }}</p>
+                        {% if grant.status == 'approved' %}
+                            <div class="alert alert-success mt-3">
+                                <strong>🎉 Your project is approved!</strong><br>
+                                We're excited to support your impactful work in the community.
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    {% else %}
+        <!-- No Application -->
+        <div class="row">
+            <div class="col-12">
+                <div class="card text-center">
+                    <div class="card-body py-5">
+                        <i class="fas fa-file-plus fa-4x text-muted mb-4"></i>
+                        <h4>No Grant Application Found</h4>
+                        <p class="text-muted mb-4">You haven't submitted a grant application yet. Ready to make a difference?</p>
+                        <a href="{% url 'grants:apply' %}" class="btn btn-primary btn-lg">
+                            <i class="fas fa-plus me-2"></i>Apply for Grant
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+</div>
+
+<!-- Contact Support Modal -->
+<div class="modal fade" id="contactModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Contact Support</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p><strong>Need help with your application?</strong></p>
+                <p>Our support team is here to help:</p>
+                <ul>
+                    <li><strong>Email:</strong> grantdavejohnsonfoundation@gmail.com</li>
+                    <li><strong>Phone:</strong> +1 (872) 228-1570</li>
+                    <li><strong>Business Hours:</strong> Monday - Friday, 9 AM - 5 PM EST</li>
+                </ul>
+                {% if grant and grant.status == 'approved' %}
+                    <div class="alert alert-info">
+                        <strong>WhatsApp Support Available:</strong><br>
+                        As an approved grant recipient, you now have access to our WhatsApp support channel. Check your approval letter for details.
+                    </div>
+                {% endif %}
+                <p class="text-muted">Please include your Application ID (DJF-{{ grant.id|stringformat:"04d" }}) when contacting support.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <a href="mailto:grantdavejohnsonfoundation@gmail.com?subject=Grant Application Support - DJF-{{ grant.id|stringformat:'04d' }}" class="btn btn-primary">Send Email</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,553 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Grant Application - David Johnson Foundation{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Mobile Responsiveness for Grant Application */
+    @media (max-width: 768px) {
+        .progress-indicator {
+            display: none !important;
+        }
+        
+        .form-section {
+            margin-bottom: 2rem;
+        }
+        
+        .section-header {
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+        }
+        
+        .btn-lg {
+            width: 100%;
+            margin-bottom: 1rem;
+        }
+        
+        .display-5 {
+            font-size: 2rem;
+        }
+        
+        .container-fluid {
+            padding-left: 15px;
+            padding-right: 15px;
+        }
+        
+        .form-control, .form-select {
+            font-size: 16px; /* Prevents zoom on iOS */
+        }
+        
+        .card-body {
+            padding: 1rem;
+        }
+        
+        .row.g-3 > * {
+            margin-bottom: 1rem;
+        }
+    }
+    
+    @media (max-width: 576px) {
+        .display-5 {
+            font-size: 1.5rem;
+        }
+        
+        .lead {
+            font-size: 1rem;
+        }
+        
+        .section-header {
+            font-size: 1.1rem;
+        }
+        
+        .btn {
+            padding: 12px 20px;
+        }
+        
+        .alert {
+            font-size: 0.9rem;
+            padding: 0.75rem;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <!-- Header Section -->
+            <div class="text-center mb-5">
+                <h1 class="display-5 fw-bold text-primary">Grant Application</h1>
+                <p class="lead text-muted">Community Impact Foundation Grant Program</p>
+                <div class="row justify-content-center">
+                    <div class="col-md-8">
+                        <div class="alert alert-info">
+                            <i class="fas fa-info-circle me-2"></i>
+                            <strong>Please complete all sections carefully.</strong> Our review process typically takes 2-4 weeks. 
+                            Applications are reviewed monthly by our grant committee.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Progress Indicator -->
+            <div class="row justify-content-center mb-4 progress-indicator d-none d-md-block">
+                <div class="col-md-10">
+                    <div class="card shadow-sm">
+                        <div class="card-body py-3">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="text-center">
+                                    <div class="bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                                        <i class="fas fa-user"></i>
+                                    </div>
+                                    <div class="mt-2 small fw-bold">Personal Info</div>
+                                </div>
+                                <div class="flex-fill border-top mx-3"></div>
+                                <div class="text-center">
+                                    <div class="bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                                        <i class="fas fa-building"></i>
+                                    </div>
+                                    <div class="mt-2 small fw-bold">Organization</div>
+                                </div>
+                                <div class="flex-fill border-top mx-3"></div>
+                                <div class="text-center">
+                                    <div class="bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                                        <i class="fas fa-lightbulb"></i>
+                                    </div>
+                                    <div class="mt-2 small fw-bold">Project Details</div>
+                                </div>
+                                <div class="flex-fill border-top mx-3"></div>
+                                <div class="text-center">
+                                    <div class="bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                                        <i class="fas fa-dollar-sign"></i>
+                                    </div>
+                                    <div class="mt-2 small fw-bold">Financial</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Application Form -->
+            <div class="row justify-content-center">
+                <div class="col-md-10">
+                    <form method="post" class="needs-validation" novalidate>
+                        {% csrf_token %}
+                        {{ form.hp }}
+                        
+                        {% if form.non_field_errors %}
+                            <div class="alert alert-danger mb-4">
+                                <h6 class="alert-heading">Please correct the following errors:</h6>
+                                {{ form.non_field_errors }}
+                            </div>
+                        {% endif %}
+
+                        <!-- Section 1: Personal Information -->
+                        <div class="card shadow mb-4">
+                            <div class="card-header bg-primary text-white">
+                                <h5 class="card-title mb-0">
+                                    <i class="fas fa-user me-2"></i>Personal Information
+                                </h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <label for="{{ form.full_name.id_for_label }}" class="form-label fw-bold">
+                                            {{ form.full_name.label }} <span class="text-danger">*</span>
+                                        </label>
+                                        {{ form.full_name }}
+                                        {% if form.full_name.errors %}
+                                            <div class="invalid-feedback d-block">{{ form.full_name.errors.as_text }}</div>
+                                        {% endif %}
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="{{ form.email.id_for_label }}" class="form-label fw-bold">
+                                            {{ form.email.label }} <span class="text-danger">*</span>
+                                        </label>
+                                        {{ form.email }}
+                                        {% if form.email.errors %}
+                                            <div class="invalid-feedback d-block">{{ form.email.errors.as_text }}</div>
+                                        {% endif %}
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="{{ form.phone.id_for_label }}" class="form-label fw-bold">
+                                            {{ form.phone.label }} <span class="text-danger">*</span>
+                                        </label>
+                                        {{ form.phone }}
+                                        {% if form.phone.errors %}
+                                            <div class="invalid-feedback d-block">{{ form.phone.errors.as_text }}</div>
+                                        {% endif %}
+                                    </div>
+                                    <div class="col-12">
+                                        <label for="{{ form.address.id_for_label }}" class="form-label fw-bold">
+                                            {{ form.address.label }} <span class="text-danger">*</span>
+                                        </label>
+                                        {{ form.address }}
+                                        {% if form.address.errors %}
+                                            <div class="invalid-feedback d-block">{{ form.address.errors.as_text }}</div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Section 2: Organization Details -->
+                        <div class="card shadow mb-4">
+                            <div class="card-header bg-success text-white">
+                                <h5 class="card-title mb-0">
+                                    <i class="fas fa-building me-2"></i>Organization Details
+                                </h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="row g-3">
+                                    <div class="col-md-8">
+                                        <label for="{{ form.organization_name.id_for_label }}" class="form-label fw-bold">
+                                            {{ form.organization_name.label }} <span class="text-danger">*</span>
+                                        </label>
+                                        {{ form.organization_name }}
+                                        {% if form.organization_name.errors %}
+                                            <div class="invalid-feedback d-block">{{ form.organization_name.errors.as_text }}</div>
+                                        {% endif %}
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="{{ form.organization_type.id_for_label }}" class="form-label fw-bold">
+                                            {{ form.organization_type.label }} <span class="text-danger">*</span>
+                                        </label>
+                                        {{ form.organization_type }}
+                                        {% if form.organization_type.errors %}
+                                            <div class="invalid-feedback d-block">{{ form.organization_type.errors.as_text }}</div>
+                                        {% endif %}
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="{{ form.tax_id.id_for_label }}" class="form-label fw-bold">
+                                            {{ form.tax_id.label }}
+                                        </label>
+                                        {{ form.tax_id }}
+                                        <div class="form-text">For tax-exempt organizations</div>
+                                        {% if form.tax_id.errors %}
+                                            <div class="invalid-feedback d-block">{{ form.tax_id.errors.as_text }}</div>
+                                        {% endif %}
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label for="{{ form.years_established.id_for_label }}" class="form-label fw-bold">
+                                            {{ form.years_established.label }}
+                                        </label>
+                                        {{ form.years_established }}
+                                        {% if form.years_established.errors %}
+                                            <div class="invalid-feedback d-block">{{ form.years_established.errors.as_text }}</div>
+                                        {% endif %}
+                                    </div>
+                                    <div class="col-md-9">
+                                        <label for="{{ form.website.id_for_label }}" class="form-label fw-bold">
+                                            {{ form.website.label }}
+                                        </label>
+                                        {{ form.website }}
+                                        {% if form.website.errors %}
+                                            <div class="invalid-feedback d-block">{{ form.website.errors.as_text }}</div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Section 3: Project Information -->
+                        <div class="card shadow mb-4">
+                            <div class="card-header bg-info text-white">
+                                <h5 class="card-title mb-0">
+                                    <i class="fas fa-lightbulb me-2"></i>Project Information
+                                </h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="row g-3">
+                                    <div class="col-md-8">
+                                        <label for="{{ form.project_title.id_for_label }}" class="form-label fw-bold">
+                                            {{ form.project_title.label }} <span class="text-danger">*</span>
+                                        </label>
+                                        {{ form.project_title }}
+                                        {% if form.project_title.errors %}
+                                            <div class="invalid-feedback d-block">{{ form.project_title.errors.as_text }}</div>
+                                        {% endif %}
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="{{ form.project_category.id_for_label }}" class="form-label fw-bold">
+                                            {{ form.project_category.label }} <span class="text-danger">*</span>
+                                        </label>
+                                        {{ form.project_category }}
+                                        {% if form.project_category.errors %}
+                                            <div class="invalid-feedback d-block">{{ form.project_category.errors.as_text }}</div>
+                                        {% endif %}
+                                    </div>
+                                    <div class="col-12">
+                                        <label for="{{ form.project_description.id_for_label }}" class="form-label fw-bold">
+                                            {{ form.project_description.label }} <span class="text-danger">*</span>
+                                        </label>
+                                        {{ form.project_description }}
+                                        <div class="form-text">{{ form.project_description.help_text }}</div>
+                                        {% if form.project_description.errors %}
+                                            <div class="invalid-feedback d-block">{{ form.project_description.errors.as_text }}</div>
+                                        {% endif %}
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="{{ form.project_goals.id_for_label }}" class="form-label fw-bold">
+                                            {{ form.project_goals.label }} <span class="text-danger">*</span>
+                                        </label>
+                                        {{ form.project_goals }}
+                                        <div class="form-text">{{ form.project_goals.help_text }}</div>
+                                        {% if form.project_goals.errors %}
+                                            <div class="invalid-feedback d-block">{{ form.project_goals.errors.as_text }}</div>
+                                        {% endif %}
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="{{ form.target_beneficiaries.id_for_label }}" class="form-label fw-bold">
+                                            {{ form.target_beneficiaries.label }} <span class="text-danger">*</span>
+                                        </label>
+                                        {{ form.target_beneficiaries }}
+                                        <div class="form-text">{{ form.target_beneficiaries.help_text }}</div>
+                                        {% if form.target_beneficiaries.errors %}
+                                            <div class="invalid-feedback d-block">{{ form.target_beneficiaries.errors.as_text }}</div>
+                                        {% endif %}
+                                    </div>
+                                    <div class="col-12">
+                                        <label for="{{ form.expected_impact.id_for_label }}" class="form-label fw-bold">
+                                            {{ form.expected_impact.label }} <span class="text-danger">*</span>
+                                        </label>
+                                        {{ form.expected_impact }}
+                                        <div class="form-text">{{ form.expected_impact.help_text }}</div>
+                                        {% if form.expected_impact.errors %}
+                                            <div class="invalid-feedback d-block">{{ form.expected_impact.errors.as_text }}</div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Section 4: Financial Information -->
+                        <div class="card shadow mb-4">
+                            <div class="card-header bg-warning text-dark">
+                                <h5 class="card-title mb-0">
+                                    <i class="fas fa-dollar-sign me-2"></i>Financial Information
+                                </h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="row g-3">
+                                    <div class="col-md-4">
+                                        <label for="{{ form.amount_requested.id_for_label }}" class="form-label fw-bold">
+                                            {{ form.amount_requested.label }} <span class="text-danger">*</span>
+                                        </label>
+                                        {{ form.amount_requested }}
+                                        {% if form.amount_requested.errors %}
+                                            <div class="invalid-feedback d-block">{{ form.amount_requested.errors.as_text }}</div>
+                                        {% endif %}
+                                    </div>
+                                    <div class="col-12">
+                                        <label for="{{ form.budget_breakdown.id_for_label }}" class="form-label fw-bold">
+                                            {{ form.budget_breakdown.label }} <span class="text-danger">*</span>
+                                        </label>
+                                        {{ form.budget_breakdown }}
+                                        <div class="form-text">{{ form.budget_breakdown.help_text }}</div>
+                                        {% if form.budget_breakdown.errors %}
+                                            <div class="invalid-feedback d-block">{{ form.budget_breakdown.errors.as_text }}</div>
+                                        {% endif %}
+                                    </div>
+                                    <div class="col-12">
+                                        <label for="{{ form.other_funding.id_for_label }}" class="form-label fw-bold">
+                                            {{ form.other_funding.label }}
+                                        </label>
+                                        {{ form.other_funding }}
+                                        <div class="form-text">{{ form.other_funding.help_text }}</div>
+                                        {% if form.other_funding.errors %}
+                                            <div class="invalid-feedback d-block">{{ form.other_funding.errors.as_text }}</div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Section 5: Timeline & Implementation -->
+                        <div class="card shadow mb-4">
+                            <div class="card-header bg-secondary text-white">
+                                <h5 class="card-title mb-0">
+                                    <i class="fas fa-calendar me-2"></i>Timeline & Implementation
+                                </h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <label for="{{ form.project_start_date.id_for_label }}" class="form-label fw-bold">
+                                            {{ form.project_start_date.label }} <span class="text-danger">*</span>
+                                        </label>
+                                        {{ form.project_start_date }}
+                                        {% if form.project_start_date.errors %}
+                                            <div class="invalid-feedback d-block">{{ form.project_start_date.errors.as_text }}</div>
+                                        {% endif %}
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="{{ form.project_duration.id_for_label }}" class="form-label fw-bold">
+                                            {{ form.project_duration.label }} <span class="text-danger">*</span>
+                                        </label>
+                                        {{ form.project_duration }}
+                                        <div class="form-text">{{ form.project_duration.help_text }}</div>
+                                        {% if form.project_duration.errors %}
+                                            <div class="invalid-feedback d-block">{{ form.project_duration.errors.as_text }}</div>
+                                        {% endif %}
+                                    </div>
+                                    <div class="col-12">
+                                        <label for="{{ form.implementation_plan.id_for_label }}" class="form-label fw-bold">
+                                            {{ form.implementation_plan.label }} <span class="text-danger">*</span>
+                                        </label>
+                                        {{ form.implementation_plan }}
+                                        <div class="form-text">{{ form.implementation_plan.help_text }}</div>
+                                        {% if form.implementation_plan.errors %}
+                                            <div class="invalid-feedback d-block">{{ form.implementation_plan.errors.as_text }}</div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Section 6: Experience & Qualifications -->
+                        <div class="card shadow mb-4">
+                            <div class="card-header bg-dark text-white">
+                                <h5 class="card-title mb-0">
+                                    <i class="fas fa-award me-2"></i>Experience & Qualifications
+                                </h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="row g-3">
+                                    <div class="col-12">
+                                        <label for="{{ form.experience.id_for_label }}" class="form-label fw-bold">
+                                            {{ form.experience.label }} <span class="text-danger">*</span>
+                                        </label>
+                                        {{ form.experience }}
+                                        <div class="form-text">{{ form.experience.help_text }}</div>
+                                        {% if form.experience.errors %}
+                                            <div class="invalid-feedback d-block">{{ form.experience.errors.as_text }}</div>
+                                        {% endif %}
+                                    </div>
+                                    <div class="col-12">
+                                        <label for="{{ form.team_members.id_for_label }}" class="form-label fw-bold">
+                                            {{ form.team_members.label }}
+                                        </label>
+                                        {{ form.team_members }}
+                                        <div class="form-text">{{ form.team_members.help_text }}</div>
+                                        {% if form.team_members.errors %}
+                                            <div class="invalid-feedback d-block">{{ form.team_members.errors.as_text }}</div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Section 7: Additional Information (Optional) -->
+                        <div class="card shadow mb-4">
+                            <div class="card-header bg-light text-dark">
+                                <h5 class="card-title mb-0">
+                                    <i class="fas fa-plus-circle me-2"></i>Additional Information (Optional)
+                                </h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <label for="{{ form.challenges.id_for_label }}" class="form-label fw-bold">
+                                            {{ form.challenges.label }}
+                                        </label>
+                                        {{ form.challenges }}
+                                        <div class="form-text">{{ form.challenges.help_text }}</div>
+                                        {% if form.challenges.errors %}
+                                            <div class="invalid-feedback d-block">{{ form.challenges.errors.as_text }}</div>
+                                        {% endif %}
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="{{ form.sustainability.id_for_label }}" class="form-label fw-bold">
+                                            {{ form.sustainability.label }}
+                                        </label>
+                                        {{ form.sustainability }}
+                                        <div class="form-text">{{ form.sustainability.help_text }}</div>
+                                        {% if form.sustainability.errors %}
+                                            <div class="invalid-feedback d-block">{{ form.sustainability.errors.as_text }}</div>
+                                        {% endif %}
+                                    </div>
+                                    <div class="col-12">
+                                        <label for="{{ form.additional_info.id_for_label }}" class="form-label fw-bold">
+                                            {{ form.additional_info.label }}
+                                        </label>
+                                        {{ form.additional_info }}
+                                        <div class="form-text">{{ form.additional_info.help_text }}</div>
+                                        {% if form.additional_info.errors %}
+                                            <div class="invalid-feedback d-block">{{ form.additional_info.errors.as_text }}</div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Submit Section -->
+                        <div class="card shadow mb-4">
+                            <div class="card-body text-center">
+                                <div class="mb-3">
+                                    <h5>Review Your Application</h5>
+                                    <p class="text-muted">Please review all sections before submitting. You cannot edit your application after submission.</p>
+                                </div>
+                                <div class="form-check form-check-inline mb-3">
+                                    <input class="form-check-input" type="checkbox" id="confirm" required>
+                                    <label class="form-check-label" for="confirm">
+                                        I confirm that all information provided is accurate and complete.
+                                    </label>
+                                </div>
+                                <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+                                    <button type="submit" class="btn btn-primary btn-lg px-5">
+                                        <i class="fas fa-paper-plane me-2"></i>Submit Application
+                                    </button>
+                                    <a href="{% url 'home' %}" class="btn btn-outline-secondary btn-lg px-4">
+                                        <i class="fas fa-times me-2"></i>Cancel
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Form validation
+(function() {
+    'use strict';
+    window.addEventListener('load', function() {
+        var forms = document.getElementsByClassName('needs-validation');
+        var validation = Array.prototype.filter.call(forms, function(form) {
+            form.addEventListener('submit', function(event) {
+                if (form.checkValidity() === false) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+                form.classList.add('was-validated');
+            }, false);
+        });
+    }, false);
+})();
+
+// Character counter for textareas
+document.addEventListener('DOMContentLoaded', function() {
+    const textareas = document.querySelectorAll('textarea');
+    textareas.forEach(function(textarea) {
+        const maxLength = textarea.getAttribute('maxlength');
+        if (maxLength) {
+            const counter = document.createElement('div');
+            counter.className = 'form-text text-end';
+            counter.innerHTML = `<span class="text-muted">0/${maxLength} characters</span>`;
+            textarea.parentNode.appendChild(counter);
+            
+            textarea.addEventListener('input', function() {
+                const length = textarea.value.length;
+                counter.innerHTML = `<span class="text-muted">${length}/${maxLength} characters</span>`;
+            });
+        }
+    });
+});
+</script>
+{% endblock %}

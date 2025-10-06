@@ -1,0 +1,219 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Eligibility Screening - David Johnson Foundation{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <!-- Progress Indicator -->
+            <div class="card mb-4 border-0 shadow-sm">
+                <div class="card-body">
+                    <div class="d-flex align-items-center justify-content-between mb-3">
+                        <span class="badge bg-primary">Step 1 of 4</span>
+                        <span class="text-muted">Eligibility Screening</span>
+                    </div>
+                    <div class="progress" style="height: 8px;">
+                        <div class="progress-bar bg-primary" role="progressbar" style="width: 25%"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="mb-0">
+                        <i class="fas fa-check-circle me-2"></i>
+                        Eligibility Screening
+                    </h3>
+                </div>
+                <div class="card-body p-4">
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle me-2"></i>
+                        <strong>Before we begin,</strong> please confirm that you meet our basic eligibility requirements. This helps us ensure our grants reach those who qualify for our program.
+                    </div>
+
+                    <form method="post" class="eligibility-form">
+                        {% csrf_token %}
+                        
+                        <div class="eligibility-questions">
+                            <!-- Citizenship -->
+                            <div class="mb-4">
+                                <div class="form-check p-3 border rounded">
+                                    {{ form.is_us_citizen }}
+                                    <label class="form-check-label ms-2" for="{{ form.is_us_citizen.id_for_label }}">
+                                        <strong>{{ form.is_us_citizen.label }}</strong>
+                                        <br><small class="text-muted">We currently only serve U.S. citizens and legal residents.</small>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!-- Age -->
+                            <div class="mb-4">
+                                <div class="form-check p-3 border rounded">
+                                    {{ form.age_confirmation }}
+                                    <label class="form-check-label ms-2" for="{{ form.age_confirmation.id_for_label }}">
+                                        <strong>{{ form.age_confirmation.label }}</strong>
+                                        <br><small class="text-muted">Applicants must be of legal age to enter into agreements.</small>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!-- Financial Need -->
+                            <div class="mb-4">
+                                <div class="form-check p-3 border rounded">
+                                    {{ form.financial_need }}
+                                    <label class="form-check-label ms-2" for="{{ form.financial_need.id_for_label }}">
+                                        <strong>{{ form.financial_need.label }}</strong>
+                                        <br><small class="text-muted">Our grants are intended for those experiencing genuine financial hardship.</small>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!-- Project Readiness -->
+                            <div class="mb-4">
+                                <div class="form-check p-3 border rounded">
+                                    {{ form.project_readiness }}
+                                    <label class="form-check-label ms-2" for="{{ form.project_readiness.id_for_label }}">
+                                        <strong>{{ form.project_readiness.label }}</strong>
+                                        <br><small class="text-muted">You should have a clear plan for how grant funds will be used.</small>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!-- Previous Grants -->
+                            <div class="mb-4">
+                                <label class="form-label"><strong>{{ form.previous_grants.label }}</strong></label>
+                                <div class="border rounded p-3">
+                                    {% for choice in form.previous_grants %}
+                                        <div class="form-check mb-2">
+                                            {{ choice.tag }}
+                                            <label class="form-check-label ms-2" for="{{ choice.id_for_label }}">
+                                                {{ choice.choice_label }}
+                                            </label>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+
+                        {% if form.errors %}
+                            <div class="alert alert-danger">
+                                <h6>Please address the following issues:</h6>
+                                <ul class="mb-0">
+                                    {% for field, errors in form.errors.items %}
+                                        {% for error in errors %}
+                                            <li>{{ error }}</li>
+                                        {% endfor %}
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        {% endif %}
+
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <a href="{% url 'home' %}" class="btn btn-outline-secondary me-md-2">
+                                <i class="fas fa-arrow-left me-2"></i>Back
+                            </a>
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="fas fa-arrow-right me-2"></i>Continue to Application
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Help Section -->
+            <div class="card border-0 shadow-sm mt-4">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <i class="fas fa-question-circle text-info me-2"></i>
+                        Need Help?
+                    </h5>
+                    <p class="card-text">If you have questions about eligibility requirements or need assistance with your application, we're here to help.</p>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <a href="mailto:grantdavejohnsonfoundation@gmail.com" class="btn btn-outline-info w-100">
+                                <i class="fas fa-envelope me-2"></i>Email Support
+                            </a>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <a href="https://wa.me/1234567890" class="btn btn-outline-success w-100" target="_blank">
+                                <i class="fab fa-whatsapp me-2"></i>WhatsApp Support
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.eligibility-form .form-check {
+    transition: all 0.3s ease;
+}
+
+.eligibility-form .form-check:hover {
+    background-color: #f8f9fa;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.eligibility-form .form-check-input:checked + .form-check-label {
+    color: #0d6efd;
+    font-weight: 500;
+}
+
+.progress-bar {
+    transition: width 0.6s ease;
+}
+
+.card {
+    transition: transform 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+}
+</style>
+
+<script>
+// Add interactive feedback
+document.querySelectorAll('input[type="checkbox"], input[type="radio"]').forEach(input => {
+    input.addEventListener('change', function() {
+        const label = this.closest('.form-check');
+        if (this.checked) {
+            label.classList.add('border-success');
+            label.classList.remove('border-danger');
+        } else {
+            label.classList.remove('border-success');
+        }
+    });
+});
+
+// Form validation feedback
+document.querySelector('form').addEventListener('submit', function(e) {
+    const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+    let allChecked = true;
+    
+    checkboxes.forEach(checkbox => {
+        const label = checkbox.closest('.form-check');
+        if (!checkbox.checked) {
+            allChecked = false;
+            label.classList.add('border-danger');
+        } else {
+            label.classList.remove('border-danger');
+        }
+    });
+    
+    if (!allChecked) {
+        e.preventDefault();
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    }
+});
+</script>
+{% endblock %}

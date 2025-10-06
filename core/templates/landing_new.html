@@ -1,0 +1,451 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Community Impact Foundation - Grants for Local Projects{% endblock %}
+{% block extra_meta %}
+  <meta property="og:title" content="Community Impact Foundation Grant Program" />
+  <meta property="og:description" content="Small grants, big impact — funding, mentorship, and resources for community projects." />
+  <meta property="og:image" content="{% static 'images/hero.jpg' %}" />
+  <meta property="og:image:width" content="1400" />
+  <meta property="og:image:height" content="933" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Community Impact Foundation" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Community Impact Foundation Grant Program" />
+  <meta name="twitter:description" content="Small grants, big impact — funding, mentorship, and resources for community projects." />
+  <meta name="twitter:image" content="{% static 'images/hero.jpg' %}" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "Community Impact Foundation",
+    "url": "/",
+    "logo": "{% static 'images/logo.svg' %}",
+    "sameAs": []
+  }
+  </script>
+{% endblock %}
+{% block content %}
+
+<a class="visually-hidden-focusable skip-link" href="#main-content">Skip to content</a>
+
+<!-- Hero -->
+<header class="bg-primary text-white py-5" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+  <div class="container" id="main-content">
+    <div class="row align-items-center min-vh-50">
+      <div class="col-lg-8">
+        <div class="badge bg-warning text-dark mb-3 px-3 py-2">
+          <i class="fas fa-star me-1"></i>Now Accepting Applications
+        </div>
+        <h1 class="display-4 fw-bold mb-3">Community Impact Foundation</h1>
+        <h2 class="h3 fw-normal mb-4 text-light">Empowering Communities Through Strategic Grant Funding</h2>
+        <p class="lead mb-4">We provide grants ranging from $1,000 to $25,000 to support innovative community projects, social enterprises, and nonprofit initiatives that create lasting positive impact.</p>
+        <div class="d-flex flex-wrap gap-3 mb-4">
+          {% if user.is_authenticated %}
+            <a href="{% url 'grants:apply' %}" class="btn btn-warning btn-lg px-4 py-3">
+              <i class="fas fa-paper-plane me-2"></i>Apply for Grant
+            </a>
+          {% else %}
+            <a href="{% url 'signup' %}" class="btn btn-warning btn-lg px-4 py-3">
+              <i class="fas fa-user-plus me-2"></i>Get Started
+            </a>
+          {% endif %}
+          <a href="#about" class="btn btn-outline-light btn-lg px-4 py-3">
+            <i class="fas fa-info-circle me-2"></i>Learn More
+          </a>
+        </div>
+        <div class="row text-center">
+          <div class="col-md-3 col-6">
+            <div class="h4 fw-bold">$2.5M+</div>
+            <div class="small">Granted to Date</div>
+          </div>
+          <div class="col-md-3 col-6">
+            <div class="h4 fw-bold">450+</div>
+            <div class="small">Projects Funded</div>
+          </div>
+          <div class="col-md-3 col-6">
+            <div class="h4 fw-bold">98%</div>
+            <div class="small">Success Rate</div>
+          </div>
+          <div class="col-md-3 col-6">
+            <div class="h4 fw-bold">2-4 Weeks</div>
+            <div class="small">Review Time</div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4 d-none d-lg-block">
+        <div class="card shadow-lg border-0 bg-white">
+          <div class="card-body p-4">
+            <h5 class="card-title text-dark">Quick Application Process</h5>
+            <ul class="list-unstyled text-muted">
+              <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Create free account</li>
+              <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Complete detailed application</li>
+              <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Submit supporting documents</li>
+              <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Get decision in 2-4 weeks</li>
+            </ul>
+            {% if not user.is_authenticated %}
+              <a href="{% url 'signup' %}" class="btn btn-primary w-100">Start Your Application</a>
+            {% else %}
+              <a href="{% url 'grants:apply' %}" class="btn btn-primary w-100">Apply Now</a>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- Trust Indicators -->
+<section class="py-4 bg-light">
+  <div class="container">
+    <div class="row align-items-center text-center">
+      <div class="col-md-3 col-6 mb-3 mb-md-0">
+        <div class="text-muted small mb-1">TRUSTED BY</div>
+        <div class="fw-bold">450+ Organizations</div>
+      </div>
+      <div class="col-md-3 col-6 mb-3 mb-md-0">
+        <div class="text-muted small mb-1">IMPACT</div>
+        <div class="fw-bold">100,000+ Lives Touched</div>
+      </div>
+      <div class="col-md-3 col-6">
+        <div class="text-muted small mb-1">ESTABLISHED</div>
+        <div class="fw-bold">Since 2018</div>
+      </div>
+      <div class="col-md-3 col-6">
+        <div class="text-muted small mb-1">NON-PROFIT</div>
+        <div class="fw-bold">501(c)(3) Status</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- About / Features -->
+<section id="about" class="py-5">
+  <div class="container">
+    <div class="row gy-5 align-items-center">
+      <div class="col-lg-6">
+        <h2 class="display-6 fw-bold mb-4">Our Mission</h2>
+        <p class="lead">The Community Impact Foundation was established to bridge the funding gap for small to medium-scale community projects that traditional grant programs often overlook.</p>
+        <p>We believe that meaningful change often starts at the grassroots level. Our streamlined application process and personalized support ensure that innovative ideas get the resources they need to flourish.</p>
+        <div class="row g-3 mt-4">
+          <div class="col-6">
+            <div class="d-flex align-items-center">
+              <div class="bg-primary text-white rounded-circle me-3 d-flex align-items-center justify-content-center" style="width: 48px; height: 48px;">
+                <i class="fas fa-dollar-sign"></i>
+              </div>
+              <div>
+                <h6 class="mb-0">Flexible Funding</h6>
+                <small class="text-muted">$1K - $25K range</small>
+              </div>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="d-flex align-items-center">
+              <div class="bg-success text-white rounded-circle me-3 d-flex align-items-center justify-content-center" style="width: 48px; height: 48px;">
+                <i class="fas fa-clock"></i>
+              </div>
+              <div>
+                <h6 class="mb-0">Fast Decisions</h6>
+                <small class="text-muted">2-4 weeks response</small>
+              </div>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="d-flex align-items-center">
+              <div class="bg-info text-white rounded-circle me-3 d-flex align-items-center justify-content-center" style="width: 48px; height: 48px;">
+                <i class="fas fa-users"></i>
+              </div>
+              <div>
+                <h6 class="mb-0">Mentorship</h6>
+                <small class="text-muted">Expert guidance included</small>
+              </div>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="d-flex align-items-center">
+              <div class="bg-warning text-white rounded-circle me-3 d-flex align-items-center justify-content-center" style="width: 48px; height: 48px;">
+                <i class="fas fa-network-wired"></i>
+              </div>
+              <div>
+                <h6 class="mb-0">Network Access</h6>
+                <small class="text-muted">Connect with peers</small>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <div class="row g-4">
+          <div class="col-12">
+            <div class="card border-0 shadow-sm">
+              <div class="card-body">
+                <h5 class="card-title">Grant Categories</h5>
+                <div class="row g-2">
+                  <div class="col-6"><span class="badge bg-primary">Education</span></div>
+                  <div class="col-6"><span class="badge bg-success">Health & Wellness</span></div>
+                  <div class="col-6"><span class="badge bg-info">Technology</span></div>
+                  <div class="col-6"><span class="badge bg-warning">Environment</span></div>
+                  <div class="col-6"><span class="badge bg-secondary">Community Dev</span></div>
+                  <div class="col-6"><span class="badge bg-dark">Arts & Culture</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="card border-0 shadow-sm h-100">
+              <div class="card-body text-center">
+                <h6 class="card-title">Average Grant</h6>
+                <div class="h3 text-primary fw-bold">$8,500</div>
+              </div>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="card border-0 shadow-sm h-100">
+              <div class="card-body text-center">
+                <h6 class="card-title">Approval Rate</h6>
+                <div class="h3 text-success fw-bold">78%</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Success Stories / Testimonials -->
+<section class="py-5 bg-light">
+  <div class="container">
+    <div class="row">
+      <div class="col-12 text-center mb-5">
+        <h2 class="display-6 fw-bold">Success Stories</h2>
+        <p class="lead text-muted">See how our grants are making a difference in communities</p>
+      </div>
+    </div>
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="card border-0 shadow-sm h-100">
+          <div class="card-body">
+            <div class="d-flex align-items-center mb-3">
+              <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iMjAiIGN5PSIyMCIgcj0iMjAiIGZpbGw9IiM2NjdlZWEiLz4KPHRLEHU+CiAgPHBhdGggZD0iTTIwIDEwQzE1LjAyIDEwIDExIDEzLjk4IDExIDE5QzExIDI0LjAyIDE1LjAyIDI4IDIwIDI4QzI0Ljk4IDI4IDI5IDI0LjAyIDI5IDE5QzI5IDEzLjk4IDI0Ljk4IDEwIDIwIDEwWiIgZmlsbD0id2hpdGUiLz4KICA8cGF0aCBkPSJNMjAgMjhDMTguMzQgMjggMTcgMjkuMzQgMTcgMzFIMjNDMjMgMjkuMzQgMjEuNjYgMjggMjAgMjhaIiBmaWxsPSJ3aGl0ZSIvPgo8L3N2Zz4K" alt="Maria Santos" class="rounded-circle me-3">
+              <div>
+                <h6 class="mb-0">Maria Santos</h6>
+                <small class="text-muted">Community Garden Project</small>
+              </div>
+            </div>
+            <p class="card-text">"The $5,000 grant helped us transform an abandoned lot into a thriving community garden that now feeds 50 local families. The mentorship program connected us with urban farming experts."</p>
+            <div class="text-warning">
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card border-0 shadow-sm h-100">
+          <div class="card-body">
+            <div class="d-flex align-items-center mb-3">
+              <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iMjAiIGN5PSIyMCIgcj0iMjAiIGZpbGw9IiMyOGE3NDUiLz4KPHRLEHU+CiAgPHBhdGggZD0iTTIwIDEwQzE1LjAyIDEwIDExIDEzLjk4IDExIDE5QzExIDI0LjAyIDE1LjAyIDI4IDIwIDI4QzI0Ljk4IDI4IDI5IDI0LjAyIDI5IDE5QzI5IDEzLjk4IDI0Ljk4IDEwIDIwIDEwWiIgZmlsbD0id2hpdGUiLz4KICA8cGF0aCBkPSJNMjAgMjhDMTguMzQgMjggMTcgMjkuMzQgMTcgMzFIMjNDMjMgMjkuMzQgMjEuNjYgMjggMjAgMjhaIiBmaWxsPSJ3aGl0ZSIvPgo8L3N2Zz4K" alt="David Kim" class="rounded-circle me-3">
+              <div>
+                <h6 class="mb-0">David Kim</h6>
+                <small class="text-muted">Youth Coding Bootcamp</small>
+              </div>
+            </div>
+            <p class="card-text">"Our $12,000 grant enabled us to provide free coding classes to 120 underserved youth. 85% of participants are now in tech internships or college computer science programs."</p>
+            <div class="text-warning">
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card border-0 shadow-sm h-100">
+          <div class="card-body">
+            <div class="d-flex align-items-center mb-3">
+              <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iMjAiIGN5PSIyMCIgcj0iMjAiIGZpbGw9IiNmZDc5MTQiLz4KPHRLEHU+CiAgPHBhdGggZD0iTTIwIDEwQzE1LjAyIDEwIDExIDEzLjk4IDExIDE5QzExIDI0LjAyIDE1LjAyIDI4IDIwIDI4QzI0Ljk4IDI4IDI5IDI0LjAyIDI5IDE5QzI5IDEzLjk4IDI0Ljk4IDEwIDIwIDEwWiIgZmlsbD0id2hpdGUiLz4KICA8cGF0aCBkPSJNMjAgMjhDMTguMzQgMjggMTcgMjkuMzQgMTcgMzFIMjNDMjMgMjkuMzQgMjEuNjYgMjggMjAgMjhaIiBmaWxsPSJ3aGl0ZSIvPgo8L3N2Zz4K" alt="Dr. Sarah Johnson" class="rounded-circle me-3">
+              <div>
+                <h6 class="mb-0">Dr. Sarah Johnson</h6>
+                <small class="text-muted">Mobile Health Clinic</small>
+              </div>
+            </div>
+            <p class="card-text">"The $18,000 grant helped launch our mobile health clinic serving rural communities. We've provided healthcare to over 2,000 people who previously had limited access to medical services."</p>
+            <div class="text-warning">
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA section: direct users to the apply page -->
+<section id="apply" class="py-5 bg-primary text-white">
+  <div class="container">
+    <div class="row align-items-center">
+      <div class="col-lg-8">
+        <h3 class="display-6 fw-bold mb-3">Ready to Make an Impact?</h3>
+        <p class="lead mb-0">Join hundreds of successful grant recipients who are transforming their communities. Applications are reviewed monthly - the sooner you apply, the sooner you can get started.</p>
+      </div>
+      <div class="col-lg-4 text-lg-end mt-4 mt-lg-0">
+        {% if user.is_authenticated %}
+          <a href="{% url 'grants:apply' %}" class="btn btn-warning btn-lg px-4 py-3">
+            <i class="fas fa-paper-plane me-2"></i>Start Application
+          </a>
+        {% else %}
+          <a href="{% url 'signup' %}" class="btn btn-warning btn-lg px-4 py-3">
+            <i class="fas fa-user-plus me-2"></i>Create Account
+          </a>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Contact -->
+<section id="contact" class="py-5 bg-light">
+  <div class="container">
+    <div class="row align-items-center">
+      <div class="col-lg-8">
+        <h4 class="fw-bold mb-3">Questions About Your Application?</h4>
+        <p class="mb-2">Our grants team is here to help you navigate the application process and answer any eligibility questions.</p>
+        <div class="row g-3">
+          <div class="col-md-6">
+            <div class="d-flex align-items-center">
+              <i class="fas fa-envelope text-primary me-3"></i>
+              <div>
+                <strong>Email:</strong> <a href="mailto:grants@communityimpact.org">grants@communityimpact.org</a>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="d-flex align-items-center">
+              <i class="fas fa-phone text-primary me-3"></i>
+              <div>
+                <strong>Phone:</strong> <a href="tel:+18722281570">+1 (872) 228-1570</a>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="d-flex align-items-center">
+              <i class="fab fa-whatsapp text-primary me-3"></i>
+              <div>
+                <strong>WhatsApp:</strong> <a href="https://wa.me/18722281570">+1 (872) 228-1570</a>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="d-flex align-items-center">
+              <i class="fas fa-clock text-primary me-3"></i>
+              <div>
+                <strong>Office Hours:</strong> Mon-Fri 9AM-5PM EST
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4 text-lg-end mt-4 mt-lg-0">
+        {% if user.is_authenticated %}
+          <a href="{% url 'grants:apply' %}" class="btn btn-primary btn-lg">Start Application</a>
+        {% else %}
+          <a href="{% url 'signup' %}" class="btn btn-primary btn-lg">Get Started Today</a>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="py-5 bg-dark text-white">
+  <div class="container">
+    <div class="row gy-4">
+      <div class="col-lg-4">
+        <h5 class="fw-bold mb-3">Community Impact Foundation</h5>
+        <p class="text-light mb-3">Empowering communities through strategic grant funding and mentorship since 2018.</p>
+        <div class="d-flex gap-3">
+          <a href="#" class="text-white"><i class="fab fa-twitter fs-5"></i></a>
+          <a href="#" class="text-white"><i class="fab fa-facebook fs-5"></i></a>
+          <a href="#" class="text-white"><i class="fab fa-linkedin fs-5"></i></a>
+          <a href="#" class="text-white"><i class="fab fa-instagram fs-5"></i></a>
+        </div>
+      </div>
+      <div class="col-lg-2 col-md-6">
+        <h6 class="fw-bold mb-3">Quick Links</h6>
+        <ul class="list-unstyled">
+          <li class="mb-2"><a href="#about" class="text-light text-decoration-none">About Us</a></li>
+          <li class="mb-2"><a href="#apply" class="text-light text-decoration-none">Apply</a></li>
+          <li class="mb-2"><a href="#contact" class="text-light text-decoration-none">Contact</a></li>
+          {% if user.is_authenticated %}
+            <li class="mb-2"><a href="{% url 'grants:status' %}" class="text-light text-decoration-none">Check Status</a></li>
+          {% endif %}
+        </ul>
+      </div>
+      <div class="col-lg-2 col-md-6">
+        <h6 class="fw-bold mb-3">Legal</h6>
+        <ul class="list-unstyled">
+          <li class="mb-2"><a href="#" class="text-light text-decoration-none">Privacy Policy</a></li>
+          <li class="mb-2"><a href="#" class="text-light text-decoration-none">Terms of Service</a></li>
+          <li class="mb-2"><a href="#" class="text-light text-decoration-none">Grant Guidelines</a></li>
+          <li class="mb-2"><a href="#" class="text-light text-decoration-none">Annual Report</a></li>
+        </ul>
+      </div>
+      <div class="col-lg-4">
+        <h6 class="fw-bold mb-3">Newsletter</h6>
+        <p class="text-light mb-3">Stay updated on grant opportunities and success stories.</p>
+        <div class="input-group">
+          <input type="email" class="form-control" placeholder="Enter your email">
+          <button class="btn btn-primary" type="button">Subscribe</button>
+        </div>
+      </div>
+    </div>
+    <hr class="my-4 text-white-50">
+    <div class="row align-items-center">
+      <div class="col-md-6">
+        <p class="mb-0 text-light small">© 2025 Community Impact Foundation. All rights reserved.</p>
+      </div>
+      <div class="col-md-6 text-md-end">
+        <p class="mb-0 text-light small">EIN: 12-3456789 | 501(c)(3) Nonprofit Organization</p>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+// Smooth scrolling for anchor links
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    });
+});
+
+// Newsletter subscription (placeholder)
+document.querySelector('.input-group button').addEventListener('click', function(e) {
+    const email = this.previousElementSibling.value;
+    if (email) {
+        alert('Thank you for subscribing! We\'ll keep you updated on grant opportunities.');
+        this.previousElementSibling.value = '';
+    }
+});
+
+// Prevent double submit
+document.addEventListener('submit', function(e){
+  const btn = document.getElementById('submit-application');
+  if(btn){ btn.disabled = true; btn.innerText = 'Submitting...'; }
+});
+</script>
+
+{% endblock %}

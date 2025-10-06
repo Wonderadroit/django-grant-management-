@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="600" viewBox="0 0 1400 600">
+  <rect width="1400" height="600" fill="#0d6efd"/>
+  <g fill="#fff" font-family="Segoe UI, Roboto, Arial" font-size="36" text-anchor="middle">
+    <text x="700" y="260">Hero Image Placeholder</text>
+    <text x="700" y="320" font-size="20">Replace with a high-quality photo (Unsplash / Pexels)</text>
+  </g>
+</svg>

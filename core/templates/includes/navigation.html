@@ -47,10 +47,13 @@
                 <span>Support</span>
               </a>
               <div class="dropdown-divider"></div>
-              <a href="{% url 'logout' %}" class="dropdown-item">
-                <i class="ni ni-user-run"></i>
-                <span>Logout</span>
-              </a>
+              <form method="post" action="{% url 'logout' %}" class="dropdown-item p-0">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-link dropdown-item text-left w-100 border-0" style="text-decoration: none;">
+                  <i class="ni ni-user-run"></i>
+                  <span>Logout</span>
+                </button>
+              </form>
             </div>
           </li>
         </ul>

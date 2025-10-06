@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="280" height="60" viewBox="0 0 280 60">
+  <!-- Background -->
+  <rect width="280" height="60" fill="#667eea" rx="8"/>
+  
+  <!-- Icon/Symbol -->
+  <g transform="translate(15, 12)">
+    <!-- House/Foundation symbol -->
+    <path d="M18 36L8 24l10-12 10 12-10 12z" fill="#ffffff" opacity="0.9"/>
+    <rect x="12" y="28" width="12" height="8" fill="#ffffff" opacity="0.9"/>
+    <rect x="16" y="32" width="4" height="4" fill="#667eea"/>
+  </g>
+  
+  <!-- Text -->
+  <text x="50" y="24" fill="#fff" font-family="Segoe UI, Roboto, Arial" font-size="16" font-weight="600">Dave Johnson</text>
+  <text x="50" y="42" fill="#fff" font-family="Segoe UI, Roboto, Arial" font-size="12" opacity="0.9">Foundation</text>
+</svg>

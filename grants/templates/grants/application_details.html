@@ -1,0 +1,438 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Application Details - David Johnson Foundation{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <!-- Progress Indicator -->
+            <div class="card mb-4 border-0 shadow-sm">
+                <div class="card-body">
+                    <div class="d-flex align-items-center justify-content-between mb-3">
+                        <span class="badge bg-primary">Step 2 of 4</span>
+                        <span class="text-muted">Application Details</span>
+                    </div>
+                    <div class="progress" style="height: 8px;">
+                        <div class="progress-bar bg-primary" role="progressbar" style="width: 50%"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Auto-save indicator -->
+            <div id="autosave-indicator" class="alert alert-info d-none">
+                <i class="fas fa-save me-2"></i>
+                Draft saved automatically
+            </div>
+
+            <form method="post" class="application-form" id="application-form">
+                {% csrf_token %}
+                
+                <!-- Personal Information -->
+                <div class="card border-0 shadow-sm mb-4">
+                    <div class="card-header bg-primary text-white">
+                        <h4 class="mb-0">
+                            <i class="fas fa-user me-2"></i>
+                            Personal Information
+                        </h4>
+                    </div>
+                    <div class="card-body p-4">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.full_name.id_for_label }}" class="form-label">{{ form.full_name.label }}</label>
+                                {{ form.full_name }}
+                                {% if form.full_name.errors %}
+                                    <div class="text-danger small">{{ form.full_name.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.email.id_for_label }}" class="form-label">{{ form.email.label }}</label>
+                                {{ form.email }}
+                                {% if form.email.errors %}
+                                    <div class="text-danger small">{{ form.email.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.phone.id_for_label }}" class="form-label">{{ form.phone.label }}</label>
+                                {{ form.phone }}
+                                {% if form.phone.errors %}
+                                    <div class="text-danger small">{{ form.phone.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.address.id_for_label }}" class="form-label">{{ form.address.label }}</label>
+                                {{ form.address }}
+                                {% if form.address.errors %}
+                                    <div class="text-danger small">{{ form.address.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Organization Details -->
+                <div class="card border-0 shadow-sm mb-4">
+                    <div class="card-header bg-info text-white">
+                        <h4 class="mb-0">
+                            <i class="fas fa-building me-2"></i>
+                            Organization Details
+                        </h4>
+                    </div>
+                    <div class="card-body p-4">
+                        <div class="row">
+                            <div class="col-md-8 mb-3">
+                                <label for="{{ form.organization_name.id_for_label }}" class="form-label">{{ form.organization_name.label }}</label>
+                                {{ form.organization_name }}
+                                {% if form.organization_name.errors %}
+                                    <div class="text-danger small">{{ form.organization_name.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="{{ form.organization_type.id_for_label }}" class="form-label">{{ form.organization_type.label }}</label>
+                                {{ form.organization_type }}
+                                {% if form.organization_type.errors %}
+                                    <div class="text-danger small">{{ form.organization_type.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <label for="{{ form.tax_id.id_for_label }}" class="form-label">{{ form.tax_id.label }}</label>
+                                {{ form.tax_id }}
+                                {% if form.tax_id.errors %}
+                                    <div class="text-danger small">{{ form.tax_id.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="{{ form.years_established.id_for_label }}" class="form-label">{{ form.years_established.label }}</label>
+                                {{ form.years_established }}
+                                {% if form.years_established.errors %}
+                                    <div class="text-danger small">{{ form.years_established.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="{{ form.website.id_for_label }}" class="form-label">{{ form.website.label }}</label>
+                                {{ form.website }}
+                                {% if form.website.errors %}
+                                    <div class="text-danger small">{{ form.website.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project Information -->
+                <div class="card border-0 shadow-sm mb-4">
+                    <div class="card-header bg-success text-white">
+                        <h4 class="mb-0">
+                            <i class="fas fa-project-diagram me-2"></i>
+                            Project Information
+                        </h4>
+                    </div>
+                    <div class="card-body p-4">
+                        <div class="row">
+                            <div class="col-md-8 mb-3">
+                                <label for="{{ form.project_title.id_for_label }}" class="form-label">{{ form.project_title.label }}</label>
+                                {{ form.project_title }}
+                                {% if form.project_title.errors %}
+                                    <div class="text-danger small">{{ form.project_title.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="{{ form.project_category.id_for_label }}" class="form-label">{{ form.project_category.label }}</label>
+                                {{ form.project_category }}
+                                {% if form.project_category.errors %}
+                                    <div class="text-danger small">{{ form.project_category.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="{{ form.project_description.id_for_label }}" class="form-label">
+                                {{ form.project_description.label }}
+                                <span class="badge bg-secondary ms-2" id="description-count">0/200 words</span>
+                            </label>
+                            {{ form.project_description }}
+                            {% if form.project_description.errors %}
+                                <div class="text-danger small">{{ form.project_description.errors.0 }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.project_goals.id_for_label }}" class="form-label">{{ form.project_goals.label }}</label>
+                                {{ form.project_goals }}
+                                {% if form.project_goals.errors %}
+                                    <div class="text-danger small">{{ form.project_goals.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.target_beneficiaries.id_for_label }}" class="form-label">{{ form.target_beneficiaries.label }}</label>
+                                {{ form.target_beneficiaries }}
+                                {% if form.target_beneficiaries.errors %}
+                                    <div class="text-danger small">{{ form.target_beneficiaries.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="{{ form.expected_impact.id_for_label }}" class="form-label">{{ form.expected_impact.label }}</label>
+                            {{ form.expected_impact }}
+                            {% if form.expected_impact.errors %}
+                                <div class="text-danger small">{{ form.expected_impact.errors.0 }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Financial Information -->
+                <div class="card border-0 shadow-sm mb-4">
+                    <div class="card-header bg-warning text-dark">
+                        <h4 class="mb-0">
+                            <i class="fas fa-dollar-sign me-2"></i>
+                            Financial Information
+                        </h4>
+                    </div>
+                    <div class="card-body p-4">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.amount_requested.id_for_label }}" class="form-label">{{ form.amount_requested.label }}</label>
+                                {{ form.amount_requested }}
+                                {% if form.amount_requested.errors %}
+                                    <div class="text-danger small">{{ form.amount_requested.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.project_duration.id_for_label }}" class="form-label">{{ form.project_duration.label }}</label>
+                                {{ form.project_duration }}
+                                {% if form.project_duration.errors %}
+                                    <div class="text-danger small">{{ form.project_duration.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="{{ form.budget_breakdown.id_for_label }}" class="form-label">{{ form.budget_breakdown.label }}</label>
+                            {{ form.budget_breakdown }}
+                            {% if form.budget_breakdown.errors %}
+                                <div class="text-danger small">{{ form.budget_breakdown.errors.0 }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.project_start_date.id_for_label }}" class="form-label">{{ form.project_start_date.label }}</label>
+                                {{ form.project_start_date }}
+                                {% if form.project_start_date.errors %}
+                                    <div class="text-danger small">{{ form.project_start_date.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.other_funding.id_for_label }}" class="form-label">{{ form.other_funding.label }}</label>
+                                {{ form.other_funding }}
+                                {% if form.other_funding.errors %}
+                                    <div class="text-danger small">{{ form.other_funding.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Implementation & Experience -->
+                <div class="card border-0 shadow-sm mb-4">
+                    <div class="card-header bg-secondary text-white">
+                        <h4 class="mb-0">
+                            <i class="fas fa-cogs me-2"></i>
+                            Implementation & Experience
+                        </h4>
+                    </div>
+                    <div class="card-body p-4">
+                        <div class="mb-3">
+                            <label for="{{ form.implementation_plan.id_for_label }}" class="form-label">{{ form.implementation_plan.label }}</label>
+                            {{ form.implementation_plan }}
+                            {% if form.implementation_plan.errors %}
+                                <div class="text-danger small">{{ form.implementation_plan.errors.0 }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="{{ form.experience.id_for_label }}" class="form-label">{{ form.experience.label }}</label>
+                            {{ form.experience }}
+                            {% if form.experience.errors %}
+                                <div class="text-danger small">{{ form.experience.errors.0 }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.team_members.id_for_label }}" class="form-label">{{ form.team_members.label }}</label>
+                                {{ form.team_members }}
+                                {% if form.team_members.errors %}
+                                    <div class="text-danger small">{{ form.team_members.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.challenges.id_for_label }}" class="form-label">{{ form.challenges.label }}</label>
+                                {{ form.challenges }}
+                                {% if form.challenges.errors %}
+                                    <div class="text-danger small">{{ form.challenges.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.sustainability.id_for_label }}" class="form-label">{{ form.sustainability.label }}</label>
+                                {{ form.sustainability }}
+                                {% if form.sustainability.errors %}
+                                    <div class="text-danger small">{{ form.sustainability.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.additional_info.id_for_label }}" class="form-label">{{ form.additional_info.label }}</label>
+                                {{ form.additional_info }}
+                                {% if form.additional_info.errors %}
+                                    <div class="text-danger small">{{ form.additional_info.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Submit Section -->
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body p-4">
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-between">
+                            <a href="{% url 'grants:eligibility' %}" class="btn btn-outline-secondary">
+                                <i class="fas fa-arrow-left me-2"></i>Back to Eligibility
+                            </a>
+                            
+                            <div>
+                                <button type="button" class="btn btn-outline-primary me-2" onclick="saveDraft()">
+                                    <i class="fas fa-save me-2"></i>Save Draft
+                                </button>
+                                <button type="submit" class="btn btn-primary btn-lg">
+                                    <i class="fas fa-arrow-right me-2"></i>Continue to Documents
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<style>
+.application-form .card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.application-form .card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+}
+
+.form-control:focus {
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+}
+
+#autosave-indicator {
+    transition: all 0.3s ease;
+}
+
+.progress-bar {
+    transition: width 0.6s ease;
+}
+
+.word-count {
+    font-size: 0.875rem;
+    color: #6c757d;
+}
+
+.word-count.warning {
+    color: #ffc107;
+}
+
+.word-count.error {
+    color: #dc3545;
+}
+</style>
+
+<script>
+// Auto-save functionality
+let autoSaveTimeout;
+const autosaveIndicator = document.getElementById('autosave-indicator');
+const form = document.getElementById('application-form');
+
+function showAutosaveIndicator() {
+    autosaveIndicator.classList.remove('d-none');
+    setTimeout(() => {
+        autosaveIndicator.classList.add('d-none');
+    }, 3000);
+}
+
+function saveDraft() {
+    const formData = new FormData(form);
+    // In a real implementation, you'd send this to a save-draft endpoint
+    console.log('Saving draft...', Object.fromEntries(formData));
+    showAutosaveIndicator();
+}
+
+// Auto-save on input change
+document.querySelectorAll('input, textarea, select').forEach(input => {
+    input.addEventListener('input', function() {
+        clearTimeout(autoSaveTimeout);
+        autoSaveTimeout = setTimeout(saveDraft, 2000); // Save after 2 seconds of inactivity
+    });
+});
+
+// Word count for project description
+const descriptionField = document.querySelector('#{{ form.project_description.id_for_label }}');
+const descriptionCount = document.getElementById('description-count');
+
+if (descriptionField && descriptionCount) {
+    function updateWordCount() {
+        const text = descriptionField.value.trim();
+        const wordCount = text ? text.split(/\s+/).length : 0;
+        descriptionCount.textContent = `${wordCount}/200 words`;
+        
+        if (wordCount < 200) {
+            descriptionCount.className = 'badge bg-warning ms-2';
+        } else {
+            descriptionCount.className = 'badge bg-success ms-2';
+        }
+    }
+    
+    descriptionField.addEventListener('input', updateWordCount);
+    updateWordCount(); // Initial count
+}
+
+// Form completion progress
+function updateFormProgress() {
+    const requiredFields = document.querySelectorAll('input[required], textarea[required], select[required]');
+    const filledFields = Array.from(requiredFields).filter(field => field.value.trim() !== '');
+    const progress = (filledFields.length / requiredFields.length) * 50 + 50; // Start at 50% from previous step
+    
+    document.querySelector('.progress-bar').style.width = `${progress}%`;
+}
+
+// Update progress on form changes
+document.querySelectorAll('input, textarea, select').forEach(input => {
+    input.addEventListener('change', updateFormProgress);
+});
+
+// Initial progress calculation
+updateFormProgress();
+
+// Smooth scrolling to error fields
+if (document.querySelector('.text-danger')) {
+    const firstError = document.querySelector('.text-danger');
+    firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+</script>
+{% endblock %}

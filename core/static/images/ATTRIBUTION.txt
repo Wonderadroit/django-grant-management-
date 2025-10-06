@@ -1,0 +1,50 @@
+Placeholder images provided locally. Recommended high-quality free sources to replace placeholders:
+
+- Hero images: Unsplash (https://unsplash.com) or Pexels (https://www.pexels.com). Search: 'community', 'giving', 'grant', 'people helping'.
+- Testimonial images: Unsplash / Pexels - search for portraits or community shots.
+- Logo: Consider designing a simple SVG logo or using a free logo maker. For placeholder, use `core/static/images/logo.svg`.
+
+Recommended example searches:
+- Unsplash: https://unsplash.com/s/photos/community
+- Pexels: https://www.pexels.com/search/community/
+
+License notes: Unsplash and Pexels photos are free to use for commercial and non-commercial use but review each image's license and attribution requirements.
+
+Downloaded images (saved in this repo)
+------------------------------------
+These are the original Unsplash image URLs used to populate `core/static/images/` in this project. If you need to display photographer credit, visit the image URL and copy the photographer's name and profile link.
+
+- hero.jpg
+	- Source: https://images.unsplash.com/photo-1509475826633-fed577a2c71b?auto=format&fit=crop&w=1400&q=80
+
+- testimonial1.jpg
+	- Source: https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=800&q=80
+
+- testimonial2.jpg
+	- Source: https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=800&q=80
+
+- testimonial3.jpg
+	- Source: https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=800&q=80
+
+Suggested short attribution (example)
+-----------------------------------
+Photo: [Photographer Name] on Unsplash — https://unsplash.com/photos/<photo-id>
+
+Notes:
+- Unsplash images are generally free to use, but the photographer appreciates attribution. Visit the image page (use the Source URL above and remove query params so the URL is `https://unsplash.com/photos/<photo-id>`) to find the photographer's name and profile link.
+- If you want, I can attempt to fetch photographer names and append exact credits automatically. I tried earlier but Unsplash photo pages returned 404 from the automated fetch in this environment; I can try again or you can supply preferred credit text.
+
+Direct Unsplash pages (remove query params to visit the photo page and copy photographer name/link):
+
+- hero.jpg
+	- Page: https://unsplash.com/photos/photo-1509475826633-fed577a2c71b
+
+- testimonial1.jpg
+	- Page: https://unsplash.com/photos/photo-1524504388940-b1c1722653e1
+
+- testimonial2.jpg
+	- Page: https://unsplash.com/photos/photo-1544005313-94ddf0286df2
+
+- testimonial3.jpg
+	- Page: https://unsplash.com/photos/photo-1494790108377-be9c29b29330
+

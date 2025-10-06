@@ -1,0 +1,60 @@
+# Systemd service configuration for Django Grant Management System
+# Place this file at: /etc/systemd/system/djf-grant-system.service
+# Then run:
+# sudo systemctl daemon-reload
+# sudo systemctl enable djf-grant-system
+# sudo systemctl start djf-grant-system
+
+[Unit]
+Description=Django Grant Management System (Gunicorn)
+After=network.target postgresql.service redis.service
+Wants=postgresql.service redis.service
+
+[Service]
+Type=notify
+User=djf
+Group=djf
+WorkingDirectory=/var/www/djf_grant_system
+ExecStart=/var/www/djf_grant_system/venv/bin/gunicorn core.wsgi:application -c /var/www/djf_grant_system/gunicorn.conf.py
+ExecReload=/bin/kill -s HUP $MAINPID
+KillMode=mixed
+TimeoutStopSec=5
+PrivateTmp=true
+Environment="DJANGO_SETTINGS_MODULE=core.settings_production"
+Environment="PYTHONPATH=/var/www/djf_grant_system"
+
+# Security settings
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/var/www/djf_grant_system
+ReadWritePaths=/var/log/djf
+ReadWritePaths=/var/run/djf
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6
+RestrictNamespaces=true
+LockPersonality=true
+MemoryDenyWriteExecute=true
+RestrictRealtime=true
+RestrictSUIDSGID=true
+RemoveIPC=true
+
+# Resource limits
+LimitNOFILE=65536
+LimitNPROC=4096
+
+# Restart settings
+Restart=always
+RestartSec=10
+StartLimitInterval=600
+StartLimitBurst=3
+
+# Logging
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=djf-grant-system
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,176 @@
+/* Enhanced Grant Application Admin Styles */
+
+/* Fix for logout form buttons */
+.dropdown-item form button.btn-link {
+    color: inherit !important;
+    text-decoration: none !important;
+    padding: 0.375rem 1.5rem !important;
+    text-align: left !important;
+    width: 100% !important;
+    border: none !important;
+    background: transparent !important;
+}
+
+.dropdown-item form button.btn-link:hover {
+    background-color: #f8f9fa !important;
+    color: #495057 !important;
+}
+
+/* Nav logout button styling */
+.nav-link.btn-link {
+    border: none !important;
+    text-decoration: none !important;
+    padding: 0.5rem 1rem !important;
+}
+
+/* Highlight review applications that need attention */
+.column-review_application {
+    text-align: center !important;
+    min-width: 140px;
+}
+
+.column-review_application a {
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.column-review_application a:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+/* Highlight the Financial Decision fieldset */
+.highlight-section {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%) !important;
+    border: 3px solid #28a745 !important;
+    border-radius: 10px !important;
+    padding: 20px !important;
+    margin: 15px 0 !important;
+}
+
+.field-approved_amount {
+    background-color: #f8f9fa;
+    border: 2px solid #28a745;
+    border-radius: 8px;
+    padding: 15px;
+    margin: 10px 0;
+}
+
+.field-approved_amount label {
+    font-size: 16px;
+    font-weight: bold;
+    color: #28a745;
+}
+
+.field-approved_amount input {
+    font-size: 18px !important;
+    font-weight: bold !important;
+    color: #28a745 !important;
+    border: 2px solid #28a745 !important;
+    padding: 10px !important;
+    border-radius: 6px !important;
+    background-color: #ffffff !important;
+}
+
+.field-amount_requested {
+    background-color: #e7f3ff;
+    border: 2px solid #007bff;
+    border-radius: 8px;
+    padding: 15px;
+    margin: 10px 0;
+}
+
+.field-amount_requested label {
+    font-size: 16px;
+    font-weight: bold;
+    color: #007bff;
+}
+
+.field-amount_requested .readonly {
+    font-size: 18px !important;
+    font-weight: bold !important;
+    color: #007bff !important;
+    background-color: #ffffff !important;
+    padding: 10px !important;
+    border-radius: 6px !important;
+    border: 2px solid #007bff !important;
+    display: inline-block;
+}
+
+.field-approved_amount .help {
+    background-color: #e7f3ff;
+    border: 1px solid #b3d7ff;
+    border-radius: 4px;
+    padding: 10px;
+    margin-top: 8px;
+    font-size: 14px;
+}
+
+/* Under Review applications highlighting */
+tr:has(.column-status_badge span[style*="#007bff"]) {
+    background-color: #f0f8ff !important;
+    border-left: 5px solid #007bff !important;
+}
+
+/* Amount comparison styling in list view */
+.column-amount_comparison {
+    min-width: 120px;
+    text-align: center;
+}
+
+.column-requested_amount_display {
+    min-width: 120px;
+    text-align: center;
+}
+
+/* Enhanced fieldset styling */
+fieldset.module h2 {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 10px 15px;
+    margin: 0 -15px 15px -15px;
+    border-radius: 6px 6px 0 0;
+}
+
+/* Financial Decision fieldset special styling */
+fieldset:has(.field-approved_amount) h2 {
+    background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(40, 167, 69, 0.4); }
+    70% { box-shadow: 0 0 0 10px rgba(40, 167, 69, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(40, 167, 69, 0); }
+}
+
+/* Status badges enhancement */
+.column-status_badge, .column-stage_badge {
+    text-align: center;
+}
+
+/* Action buttons styling */
+.actions select option[value="approve_with_custom_amount"] {
+    font-weight: bold;
+    color: #28a745;
+}
+
+/* Highlight pending applications */
+.change-list tbody tr:has(.column-status_badge span[style*="#ffc107"]) {
+    background-color: #fffbf0;
+    border-left: 4px solid #ffc107;
+}
+
+/* Quick visual indicators */
+.amount-alert {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: bold;
+    margin-left: 8px;
+}
+
+.amount-alert.full { background-color: #d4edda; color: #155724; }
+.amount-alert.partial { background-color: #fff3cd; color: #856404; }
+.amount-alert.bonus { background-color: #d1ecf1; color: #0c5460; }

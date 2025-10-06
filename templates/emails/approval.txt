@@ -1,0 +1,6 @@
+Congratulations {{ grant.full_name }},
+
+Your grant application for {{ grant.amount_requested }} has been approved. Please contact us via WhatsApp at +1 (872) 228-1570 or email grants@davidjohnsonfoundation.org to proceed.
+
+Thank you,
+Dave Johnson Grant Program

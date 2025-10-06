@@ -1,0 +1,497 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+
+{% block title %}Analytics Dashboard - David Johnson Foundation{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <!-- Header -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h2 class="mb-0">Analytics Dashboard</h2>
+                    <p class="text-muted mb-0">Grant program performance and insights</p>
+                </div>
+                <div>
+                    <select class="form-select" id="dateRangeFilter">
+                        <option value="30">Last 30 Days</option>
+                        <option value="90">Last 90 Days</option>
+                        <option value="365">Last Year</option>
+                        <option value="all">All Time</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Key Metrics Cards -->
+    <div class="row mb-4">
+        <div class="col-lg-3 col-md-6">
+            <div class="card bg-primary text-white">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-grow-1">
+                            <h6 class="mb-0">Total Applications</h6>
+                            <h3 class="mb-0">{{ analytics.total_applications }}</h3>
+                            <small class="opacity-75">
+                                <i class="fas fa-arrow-up"></i> {{ analytics.applications_growth }}% from last period
+                            </small>
+                        </div>
+                        <div class="ms-3">
+                            <i class="fas fa-file-alt fa-2x opacity-75"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-3 col-md-6">
+            <div class="card bg-success text-white">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-grow-1">
+                            <h6 class="mb-0">Approved Grants</h6>
+                            <h3 class="mb-0">{{ analytics.approved_applications }}</h3>
+                            <small class="opacity-75">
+                                {{ analytics.approval_rate }}% approval rate
+                            </small>
+                        </div>
+                        <div class="ms-3">
+                            <i class="fas fa-check-circle fa-2x opacity-75"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-3 col-md-6">
+            <div class="card bg-info text-white">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-grow-1">
+                            <h6 class="mb-0">Total Funding</h6>
+                            <h3 class="mb-0">${{ analytics.total_funding|floatformat:0 }}</h3>
+                            <small class="opacity-75">
+                                ${{ analytics.avg_grant_amount|floatformat:0 }} average grant
+                            </small>
+                        </div>
+                        <div class="ms-3">
+                            <i class="fas fa-dollar-sign fa-2x opacity-75"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-3 col-md-6">
+            <div class="card bg-warning text-white">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-grow-1">
+                            <h6 class="mb-0">Pending Review</h6>
+                            <h3 class="mb-0">{{ analytics.pending_applications }}</h3>
+                            <small class="opacity-75">
+                                {{ analytics.avg_processing_time }} days avg processing
+                            </small>
+                        </div>
+                        <div class="ms-3">
+                            <i class="fas fa-clock fa-2x opacity-75"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Charts Row -->
+    <div class="row mb-4">
+        <!-- Applications Over Time -->
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Applications Over Time</h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="applicationsChart" height="300"></canvas>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Application Status Distribution -->
+        <div class="col-lg-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Application Status</h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="statusChart" height="300"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Detailed Analytics -->
+    <div class="row mb-4">
+        <!-- Funding Distribution -->
+        <div class="col-lg-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Funding Distribution</h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="fundingChart" height="300"></canvas>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Geographic Distribution -->
+        <div class="col-lg-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Geographic Distribution</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-sm">
+                            <thead>
+                                <tr>
+                                    <th>Location</th>
+                                    <th>Applications</th>
+                                    <th>Approved</th>
+                                    <th>Funding</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for location in analytics.geographic_data %}
+                                <tr>
+                                    <td>{{ location.city }}, {{ location.state }}</td>
+                                    <td>{{ location.applications }}</td>
+                                    <td>{{ location.approved }}</td>
+                                    <td>${{ location.funding|floatformat:0 }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Performance Metrics -->
+    <div class="row mb-4">
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Performance Metrics</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-lg-3 col-md-6 mb-3">
+                            <div class="text-center p-3 border rounded">
+                                <h4 class="text-primary mb-1">{{ analytics.avg_processing_time }}</h4>
+                                <small class="text-muted">Avg Processing Time (days)</small>
+                                <div class="progress mt-2" style="height: 5px;">
+                                    <div class="progress-bar bg-primary" style="width: 75%;"></div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-lg-3 col-md-6 mb-3">
+                            <div class="text-center p-3 border rounded">
+                                <h4 class="text-success mb-1">{{ analytics.approval_rate }}%</h4>
+                                <small class="text-muted">Approval Rate</small>
+                                <div class="progress mt-2" style="height: 5px;">
+                                    <div class="progress-bar bg-success" style="width: {{ analytics.approval_rate }}%;"></div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-lg-3 col-md-6 mb-3">
+                            <div class="text-center p-3 border rounded">
+                                <h4 class="text-info mb-1">{{ analytics.completion_rate }}%</h4>
+                                <small class="text-muted">Project Completion Rate</small>
+                                <div class="progress mt-2" style="height: 5px;">
+                                    <div class="progress-bar bg-info" style="width: {{ analytics.completion_rate }}%;"></div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-lg-3 col-md-6 mb-3">
+                            <div class="text-center p-3 border rounded">
+                                <h4 class="text-warning mb-1">{{ analytics.satisfaction_score }}/5</h4>
+                                <small class="text-muted">Recipient Satisfaction</small>
+                                <div class="progress mt-2" style="height: 5px;">
+                                    <div class="progress-bar bg-warning" style="width: {% widthratio analytics.satisfaction_score 5 100 %}%;"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Activity -->
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Recent Applications</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Applicant</th>
+                                    <th>Amount</th>
+                                    <th>Status</th>
+                                    <th>Stage</th>
+                                    <th>Submitted</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for application in recent_applications %}
+                                <tr>
+                                    <td>{{ application.full_name }}</td>
+                                    <td>${{ application.amount_requested|floatformat:2 }}</td>
+                                    <td>
+                                        <span class="badge bg-{% if application.status == 'approved' %}success{% elif application.status == 'pending' %}warning{% elif application.status == 'rejected' %}danger{% else %}secondary{% endif %}">
+                                            {{ application.status|title }}
+                                        </span>
+                                    </td>
+                                    <td>{{ application.current_stage|title }}</td>
+                                    <td>{{ application.created_at|date:"M d, Y" }}</td>
+                                    <td>
+                                        <a href="#" class="btn btn-sm btn-outline-primary">View</a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Quick Actions</h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-grid gap-2">
+                        <button class="btn btn-primary" onclick="exportData()">
+                            <i class="fas fa-download"></i> Export Analytics Data
+                        </button>
+                        <button class="btn btn-outline-secondary" onclick="generateReport()">
+                            <i class="fas fa-file-pdf"></i> Generate Report
+                        </button>
+                        <button class="btn btn-outline-info" onclick="scheduleMeeting()">
+                            <i class="fas fa-calendar"></i> Schedule Review
+                        </button>
+                        <hr>
+                        <button class="btn btn-outline-success" onclick="viewSuccessStories()">
+                            <i class="fas fa-star"></i> Success Stories
+                        </button>
+                        <button class="btn btn-outline-warning" onclick="viewAlerts()">
+                            <i class="fas fa-exclamation-triangle"></i> System Alerts
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- System Health -->
+            <div class="card mt-3">
+                <div class="card-header">
+                    <h6 class="mb-0">System Health</h6>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <span>Database Performance</span>
+                        <span class="badge bg-success">98%</span>
+                    </div>
+                    <div class="progress mb-3" style="height: 5px;">
+                        <div class="progress-bar bg-success" style="width: 98%;"></div>
+                    </div>
+                    
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <span>Application Processing</span>
+                        <span class="badge bg-warning">85%</span>
+                    </div>
+                    <div class="progress mb-3" style="height: 5px;">
+                        <div class="progress-bar bg-warning" style="width: 85%;"></div>
+                    </div>
+                    
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <span>User Satisfaction</span>
+                        <span class="badge bg-info">92%</span>
+                    </div>
+                    <div class="progress" style="height: 5px;">
+                        <div class="progress-bar bg-info" style="width: 92%;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.card {
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    border: 1px solid rgba(0, 0, 0, 0.125);
+}
+
+.progress {
+    border-radius: 0.5rem;
+}
+
+canvas {
+    width: 100% !important;
+    height: auto !important;
+}
+
+.text-center.p-3.border.rounded {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.text-center.p-3.border.rounded:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+</style>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+// Applications Over Time Chart
+const applicationsCtx = document.getElementById('applicationsChart').getContext('2d');
+const applicationsChart = new Chart(applicationsCtx, {
+    type: 'line',
+    data: {
+        labels: {{ analytics.monthly_labels|safe }},
+        datasets: [{
+            label: 'Applications Submitted',
+            data: {{ analytics.monthly_applications|safe }},
+            borderColor: '#007bff',
+            backgroundColor: 'rgba(0, 123, 255, 0.1)',
+            tension: 0.4,
+            fill: true
+        }, {
+            label: 'Applications Approved',
+            data: {{ analytics.monthly_approvals|safe }},
+            borderColor: '#28a745',
+            backgroundColor: 'rgba(40, 167, 69, 0.1)',
+            tension: 0.4,
+            fill: true
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        },
+        plugins: {
+            legend: {
+                position: 'top'
+            }
+        }
+    }
+});
+
+// Application Status Chart
+const statusCtx = document.getElementById('statusChart').getContext('2d');
+const statusChart = new Chart(statusCtx, {
+    type: 'doughnut',
+    data: {
+        labels: ['Approved', 'Pending', 'Rejected', 'In Progress'],
+        datasets: [{
+            data: [
+                {{ analytics.approved_applications }},
+                {{ analytics.pending_applications }},
+                {{ analytics.rejected_applications }},
+                {{ analytics.in_progress_applications }}
+            ],
+            backgroundColor: [
+                '#28a745',
+                '#ffc107',
+                '#dc3545',
+                '#17a2b8'
+            ]
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: {
+                position: 'bottom'
+            }
+        }
+    }
+});
+
+// Funding Distribution Chart
+const fundingCtx = document.getElementById('fundingChart').getContext('2d');
+const fundingChart = new Chart(fundingCtx, {
+    type: 'bar',
+    data: {
+        labels: ['$0-$5K', '$5K-$10K', '$10K-$25K', '$25K-$50K', '$50K+'],
+        datasets: [{
+            label: 'Number of Grants',
+            data: {{ analytics.funding_distribution|safe }},
+            backgroundColor: 'rgba(0, 123, 255, 0.7)',
+            borderColor: '#007bff',
+            borderWidth: 1
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        }
+    }
+});
+
+// Date range filter
+document.getElementById('dateRangeFilter').addEventListener('change', function() {
+    const range = this.value;
+    // Reload data based on selected range
+    window.location.href = `?range=${range}`;
+});
+
+// Quick Action Functions
+function exportData() {
+    window.location.href = '{% url "grants:export_analytics" %}';
+}
+
+function generateReport() {
+    alert('Report generation functionality would be implemented here');
+}
+
+function scheduleMeeting() {
+    alert('Meeting scheduling functionality would be implemented here');
+}
+
+function viewSuccessStories() {
+    window.location.href = '{% url "grants:success_stories" %}';
+}
+
+function viewAlerts() {
+    alert('System alerts functionality would be implemented here');
+}
+
+// Auto-refresh data every 5 minutes
+setInterval(function() {
+    location.reload();
+}, 300000);
+</script>
+{% endblock %}

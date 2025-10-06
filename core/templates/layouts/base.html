@@ -41,6 +41,8 @@
   <!-- Specific CSS goes HERE -->
   {% block stylesheets %}{% endblock stylesheets %}
 
+    <!-- Enhanced animations and interactions -->
+    <link href="{% static 'assets/css/enhanced-animations.css' %}" rel="stylesheet" />
 </head>
 
 <body class="">
@@ -60,6 +62,11 @@
   <!-- Specific JS goes HERE --> 
   {% block javascripts %}{% endblock javascripts %}
 
+    <!-- Enhanced interactions script -->
+    <script src="{% static 'assets/js/enhanced-interactions.js' %}"></script>
+    
+    <!-- CSRF Protection for forms and logout -->
+    <script src="{% static 'assets/js/csrf-protection.js' %}"></script>
 </body>
 
 </html>

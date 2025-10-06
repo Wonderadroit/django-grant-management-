@@ -1,0 +1,106 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow p-4">
+                <h2 class="mb-3">📋 Application Status</h2>
+                
+                {% if grant %}
+                    <!-- Status Badge -->
+                    <div class="mb-3">
+                        {% if grant.status == 'approved' %}
+                            <span class="badge bg-success fs-6 p-2">✅ APPROVED</span>
+                        {% elif grant.status == 'rejected' %}
+                            <span class="badge bg-danger fs-6 p-2">❌ REJECTED</span>
+                        {% elif grant.status == 'under_review' %}
+                            <span class="badge bg-primary fs-6 p-2">🔍 UNDER REVIEW</span>
+                        {% elif grant.status == 'on_hold' %}
+                            <span class="badge bg-warning fs-6 p-2">⏸️ ON HOLD</span>
+                        {% else %}
+                            <span class="badge bg-secondary fs-6 p-2">⏳ PENDING</span>
+                        {% endif %}
+                    </div>
+                    
+                    <!-- Quick Info Card -->
+                    <div class="card mb-3 border-left-primary">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <strong>Application ID:</strong> DJF-{{ grant.id|stringformat:"04d" }}<br>
+                                    <strong>Project:</strong> {{ grant.project_title }}<br>
+                                    <strong>Amount Requested:</strong> ${{ grant.amount_requested|floatformat:0 }}
+                                </div>
+                                <div class="col-md-6">
+                                    <strong>Submitted:</strong> {{ grant.created_at|date:"M d, Y H:i" }}<br>
+                                    <strong>Current Stage:</strong> {{ grant.get_current_stage_display }}<br>
+                                    {% if grant.approved_amount %}
+                                        <strong>Approved Amount:</strong> ${{ grant.approved_amount|floatformat:0 }}
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+                
+                <!-- Status Message -->
+                <div class="alert {% if grant.status == 'approved' %}alert-success{% elif grant.status == 'rejected' %}alert-danger{% elif grant.status == 'under_review' %}alert-info{% elif grant.status == 'on_hold' %}alert-warning{% else %}alert-secondary{% endif %}">
+                    {{ message|linebreaks }}
+                </div>
+                
+                {% if grant and grant.status == 'approved' %}
+                    <div class="alert alert-success mt-3">
+                        <h5><i class="fas fa-trophy me-2"></i>Your Grant is Approved!</h5>
+                        <p class="mb-2">Congratulations! Your grant application has been officially approved.</p>
+                        <a href="{% url 'grants:approval' %}" class="btn btn-success btn-lg">
+                            <i class="fas fa-certificate me-2"></i>View Approval Letter & Next Steps
+                        </a>
+                    </div>
+                {% endif %}
+                
+                <!-- Progress Bar -->
+                {% if grant %}
+                    <div class="mb-3">
+                        <label class="form-label">Application Progress</label>
+                        <div class="progress" style="height: 20px;">
+                            {% if grant.status == 'approved' %}
+                                <div class="progress-bar bg-success" role="progressbar" style="width: 100%">100% Complete</div>
+                            {% elif grant.status == 'rejected' %}
+                                <div class="progress-bar bg-danger" role="progressbar" style="width: 100%">Application Closed</div>
+                            {% elif grant.status == 'under_review' %}
+                                <div class="progress-bar bg-primary" role="progressbar" style="width: 75%">75% - Under Review</div>
+                            {% elif grant.status == 'on_hold' %}
+                                <div class="progress-bar bg-warning" role="progressbar" style="width: 60%">60% - On Hold</div>
+                            {% else %}
+                                <div class="progress-bar bg-secondary" role="progressbar" style="width: 25%">25% - Pending Review</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endif %}
+                
+                <!-- Action Buttons -->
+                <div class="d-grid gap-2 d-md-flex justify-content-md-start">
+                    <a href="{% url 'grants:status' %}" class="btn btn-secondary me-md-2">🔄 Refresh Status</a>
+                    {% if grant and grant.status != 'rejected' %}
+                        <a href="{% url 'grants:wait' %}" class="btn btn-outline-primary me-md-2">← Back to Wait Page</a>
+                        <a href="{% url 'grants:ai_insights' %}" class="btn btn-outline-info">🤖 AI Insights</a>
+                    {% endif %}
+                </div>
+                
+                <!-- Additional Information -->
+                {% if grant %}
+                    <div class="mt-4">
+                        <h6>Need Help?</h6>
+                        <p class="text-muted">
+                            If you have questions about your application status, please contact us:
+                            <br>📧 Email: grantdavejohnsonfoundation@gmail.com
+                            <br>📞 Phone: +1 (872) 228-1570
+                            <br>💬 WhatsApp: +1 (872) 228-1570
+                        </p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,10 @@
+Thank you {{ grant.full_name }},
+
+We received your application for {{ grant.amount_requested }}. Our team will review your submission and notify you of the outcome.
+
+You can check the status by logging into the site and visiting your application status page.
+
+If you need immediate assistance, please reach out via WhatsApp at +1 (872) 228-1570 or email grants@davidjohnsonfoundation.org.
+
+Thank you,
+Dave Johnson Grant Program

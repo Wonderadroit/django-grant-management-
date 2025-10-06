@@ -1,0 +1,308 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+
+{% block title %}Share Your Success Story - David Johnson Foundation{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <div class="row">
+        <div class="col-md-10 mx-auto">
+            <div class="card shadow-lg">
+                <div class="card-header bg-success text-white">
+                    <h3 class="mb-0">
+                        <i class="fas fa-star me-2"></i>Share Your Success Story
+                    </h3>
+                    <p class="mb-0">Help inspire others by sharing how the David Johnson Foundation grant impacted your project</p>
+                </div>
+                
+                <div class="card-body">
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                                {{ message }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <div class="info-card">
+                                <h5><i class="fas fa-project-diagram text-primary"></i> Your Project</h5>
+                                <p><strong>{{ grant.project_title }}</strong></p>
+                                <p class="text-muted">{{ grant.project_description|truncatewords:25 }}</p>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="info-card">
+                                <h5><i class="fas fa-dollar-sign text-success"></i> Grant Amount</h5>
+                                <p><strong>${{ grant.approved_amount|default:grant.amount_requested|floatformat:0 }}</strong></p>
+                                <p class="text-muted">Approved on {{ grant.approval_date|date:"F d, Y" }}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <form method="post" enctype="multipart/form-data" id="successStoryForm">
+                        {% csrf_token %}
+                        
+                        <!-- Success Story Form -->
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="mb-3">
+                                    <label for="{{ form.title.id_for_label }}" class="form-label">
+                                        <i class="fas fa-heading"></i> Story Title <span class="text-danger">*</span>
+                                    </label>
+                                    {{ form.title }}
+                                    {% if form.title.errors %}
+                                        <div class="text-danger">{{ form.title.errors }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="mb-3">
+                                    <label for="{{ form.story.id_for_label }}" class="form-label">
+                                        <i class="fas fa-book-open"></i> Your Story <span class="text-danger">*</span>
+                                    </label>
+                                    <div class="form-text mb-2">
+                                        Share your journey, challenges overcome, and how the grant helped you achieve your goals.
+                                    </div>
+                                    {{ form.story }}
+                                    {% if form.story.errors %}
+                                        <div class="text-danger">{{ form.story.errors }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="mb-3">
+                                    <label for="{{ form.impact_description.id_for_label }}" class="form-label">
+                                        <i class="fas fa-chart-line"></i> Impact & Results <span class="text-danger">*</span>
+                                    </label>
+                                    <div class="form-text mb-2">
+                                        Describe the specific impact your project had on your community or cause.
+                                    </div>
+                                    {{ form.impact_description }}
+                                    {% if form.impact_description.errors %}
+                                        <div class="text-danger">{{ form.impact_description.errors }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="mb-4">
+                                    <label for="{{ form.video_url.id_for_label }}" class="form-label">
+                                        <i class="fas fa-video"></i> Video URL (Optional)
+                                    </label>
+                                    <div class="form-text mb-2">
+                                        Add a YouTube or Vimeo link to share a video testimonial.
+                                    </div>
+                                    {{ form.video_url }}
+                                    {% if form.video_url.errors %}
+                                        <div class="text-danger">{{ form.video_url.errors }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Image Upload Section -->
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <h5 class="mb-0">
+                                    <i class="fas fa-images text-info"></i> Add Photos to Your Testimonial
+                                </h5>
+                                <small class="text-muted">Upload photos that show the impact of your project (like the example below)</small>
+                            </div>
+                            <div class="card-body">
+                                <!-- Example Image -->
+                                <div class="alert alert-info">
+                                    <div class="row align-items-center">
+                                        <div class="col-md-3">
+                                            <img src="{% static 'images/testimonial-example.jpg' %}" class="img-fluid rounded" alt="Testimonial Example" style="max-height: 120px;">
+                                        </div>
+                                        <div class="col-md-9">
+                                            <h6><i class="fas fa-lightbulb"></i> Example: Perfect Testimonial Photo</h6>
+                                            <p class="mb-0">Photos like this one - showing someone holding a thank you sign with the grant amount - make powerful testimonials that inspire others and showcase the foundation's impact!</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {{ image_formset.management_form }}
+                                <div id="image-formset">
+                                    {% for form in image_formset %}
+                                        <div class="image-form-group border rounded p-3 mb-3" {% if not form.instance.pk and not forloop.first %}style="display: none;"{% endif %}>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="mb-3">
+                                                        <label class="form-label">
+                                                            <i class="fas fa-upload"></i> Choose Image {% if forloop.first %}<span class="text-danger">*</span>{% endif %}
+                                                        </label>
+                                                        {{ form.image }}
+                                                        {% if form.image.errors %}
+                                                            <div class="text-danger">{{ form.image.errors }}</div>
+                                                        {% endif %}
+                                                        <div class="form-text">Max size: 5MB. Accepted formats: JPG, PNG, GIF</div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="mb-3">
+                                                        <label class="form-label">
+                                                            <i class="fas fa-comment"></i> Image Caption
+                                                        </label>
+                                                        {{ form.caption }}
+                                                        {% if form.caption.errors %}
+                                                            <div class="text-danger">{{ form.caption.errors }}</div>
+                                                        {% endif %}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-8">
+                                                    <div class="mb-3">
+                                                        <label class="form-label">
+                                                            <i class="fas fa-universal-access"></i> Alternative Text (for accessibility)
+                                                        </label>
+                                                        {{ form.alt_text }}
+                                                        {% if form.alt_text.errors %}
+                                                            <div class="text-danger">{{ form.alt_text.errors }}</div>
+                                                        {% endif %}
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <div class="form-check mt-4">
+                                                        {{ form.is_primary }}
+                                                        <label class="form-check-label" for="{{ form.is_primary.id_for_label }}">
+                                                            <i class="fas fa-star"></i> Main Image
+                                                        </label>
+                                                    </div>
+                                                    {% if form.DELETE %}
+                                                        <div class="form-check">
+                                                            {{ form.DELETE }}
+                                                            <label class="form-check-label text-danger" for="{{ form.DELETE.id_for_label }}">
+                                                                <i class="fas fa-trash"></i> Delete
+                                                            </label>
+                                                        </div>
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                                
+                                <button type="button" class="btn btn-outline-primary" id="add-image-btn">
+                                    <i class="fas fa-plus"></i> Add Another Image
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Submit Buttons -->
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                    <a href="{% url 'grants:status' %}" class="btn btn-outline-secondary me-md-2">
+                                        <i class="fas fa-arrow-left"></i> Back
+                                    </a>
+                                    <button type="submit" class="btn btn-success">
+                                        <i class="fas fa-paper-plane"></i> Share My Success Story
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.info-card {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+    border-left: 4px solid #007bff;
+    height: 100%;
+}
+
+.image-form-group {
+    background: #f8f9fa;
+    transition: all 0.3s ease;
+}
+
+.image-form-group:hover {
+    background: #e9ecef;
+}
+
+.form-control, .form-select {
+    border-radius: 8px;
+    border: 2px solid #e9ecef;
+    transition: all 0.3s ease;
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+.btn {
+    border-radius: 8px;
+    padding: 10px 20px;
+    font-weight: 500;
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    let formIndex = {{ image_formset.total_form_count }};
+    const addButton = document.getElementById('add-image-btn');
+    const formsetContainer = document.getElementById('image-formset');
+    
+    addButton.addEventListener('click', function() {
+        // Show next hidden form
+        const hiddenForms = formsetContainer.querySelectorAll('.image-form-group[style*="display: none"]');
+        if (hiddenForms.length > 0) {
+            hiddenForms[0].style.display = 'block';
+            
+            // Update form count
+            const totalForms = document.getElementById('id_images-TOTAL_FORMS');
+            totalForms.value = parseInt(totalForms.value) + 1;
+        }
+        
+        // Hide button if no more forms available
+        if (hiddenForms.length <= 1) {
+            addButton.style.display = 'none';
+        }
+    });
+    
+    // Image preview functionality
+    const imageInputs = document.querySelectorAll('input[type="file"]');
+    imageInputs.forEach(function(input) {
+        input.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    // Create or update preview image
+                    let preview = input.parentNode.querySelector('.image-preview');
+                    if (!preview) {
+                        preview = document.createElement('img');
+                        preview.className = 'image-preview img-fluid mt-2';
+                        preview.style.maxHeight = '150px';
+                        preview.style.borderRadius = '8px';
+                        input.parentNode.appendChild(preview);
+                    }
+                    preview.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    });
+});
+</script>
+{% endblock %}

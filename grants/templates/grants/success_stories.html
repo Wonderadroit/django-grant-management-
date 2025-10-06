@@ -1,0 +1,352 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+
+{% block title %}Success Stories - David Johnson Foundation{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <!-- Header Section -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="card bg-gradient-success shadow-lg">
+                <div class="card-body text-white text-center py-5">
+                    <h1 class="display-4 mb-3">
+                        <i class="fas fa-star me-3"></i>Success Stories
+                    </h1>
+                    <p class="lead mb-4">
+                        Discover how the David Johnson Foundation is making a real difference in communities across the nation
+                    </p>
+                    <div class="row justify-content-center">
+                        <div class="col-md-3 text-center">
+                            <h3><i class="fas fa-users"></i></h3>
+                            <h4>{{ total_stories }}</h4>
+                            <p>Stories Shared</p>
+                        </div>
+                        <div class="col-md-3 text-center">
+                            <h3><i class="fas fa-dollar-sign"></i></h3>
+                            <h4>${{ total_impact|floatformat:0 }}</h4>
+                            <p>Total Impact</p>
+                        </div>
+                        <div class="col-md-3 text-center">
+                            <h3><i class="fas fa-handshake"></i></h3>
+                            <h4>{{ total_organizations }}</h4>
+                            <p>Organizations Helped</p>
+                        </div>
+                        <div class="col-md-3 text-center">
+                            <h3><i class="fas fa-heart"></i></h3>
+                            <h4>{{ total_beneficiaries|default:"Thousands" }}</h4>
+                            <p>Lives Touched</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filters and Search -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card shadow">
+                <div class="card-body">
+                    <form method="get" class="row g-3">
+                        <div class="col-md-4">
+                            <label class="form-label">Search Stories</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-search"></i></span>
+                                <input type="text" class="form-control" name="search" 
+                                       value="{{ request.GET.search }}" 
+                                       placeholder="Search by title, organization, or keywords...">
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Grant Amount Range</label>
+                            <select class="form-select" name="amount_range">
+                                <option value="">All Amounts</option>
+                                <option value="0-10000" {% if request.GET.amount_range == '0-10000' %}selected{% endif %}>Under $10,000</option>
+                                <option value="10000-50000" {% if request.GET.amount_range == '10000-50000' %}selected{% endif %}>$10,000 - $50,000</option>
+                                <option value="50000-100000" {% if request.GET.amount_range == '50000-100000' %}selected{% endif %}>$50,000 - $100,000</option>
+                                <option value="100000+" {% if request.GET.amount_range == '100000+' %}selected{% endif %}>Over $100,000</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Sort By</label>
+                            <select class="form-select" name="sort">
+                                <option value="-created_at" {% if request.GET.sort == '-created_at' %}selected{% endif %}>Newest First</option>
+                                <option value="created_at" {% if request.GET.sort == 'created_at' %}selected{% endif %}>Oldest First</option>
+                                <option value="-grant_amount" {% if request.GET.sort == '-grant_amount' %}selected{% endif %}>Highest Grant Amount</option>
+                                <option value="grant_amount" {% if request.GET.sort == 'grant_amount' %}selected{% endif %}>Lowest Grant Amount</option>
+                                <option value="title" {% if request.GET.sort == 'title' %}selected{% endif %}>Title A-Z</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2 d-flex align-items-end">
+                            <button type="submit" class="btn btn-primary w-100">
+                                <i class="fas fa-filter"></i> Filter
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Stories Grid -->
+    <div class="row">
+        {% for story in success_stories %}
+        <div class="col-md-6 col-lg-4 mb-4">
+            <div class="card h-100 shadow-sm story-card">
+                <!-- Image Section -->
+                {% with story.images.filter:is_primary=True.first as primary_image %}
+                {% if primary_image %}
+                <div class="position-relative">
+                    <img src="{{ primary_image.image.url }}" 
+                         class="card-img-top" 
+                         alt="{{ primary_image.alt_text }}"
+                         style="height: 200px; object-fit: cover;">
+                    <div class="position-absolute top-0 end-0 m-2">
+                        <span class="badge bg-success">
+                            ${{ story.grant_application.approved_amount|default:story.grant_application.amount_requested|floatformat:0 }}
+                        </span>
+                    </div>
+                </div>
+                {% else %}
+                <div class="card-img-top bg-gradient-info d-flex align-items-center justify-content-center" 
+                     style="height: 200px;">
+                    <div class="text-center text-white">
+                        <i class="fas fa-star fa-3x mb-2"></i>
+                        <div class="badge bg-success">
+                            ${{ story.application.approved_amount|default:story.application.amount_requested|floatformat:0 }}
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+                {% endwith %}
+
+                <div class="card-body d-flex flex-column">
+                    <!-- Organization and Date -->
+                    <div class="mb-2">
+                        <small class="text-muted">
+                                                        <i class=\"fas fa-building\"></i> {{ story.application.organization_name }}
+                        </small>
+                        <small class="text-muted float-end">
+                            <i class="fas fa-calendar"></i> {{ story.created_at|date:"M Y" }}
+                        </small>
+                    </div>
+
+                    <!-- Title -->
+                    <h5 class="card-title">{{ story.title }}</h5>
+
+                    <!-- Story Preview -->
+                    <p class="card-text text-muted flex-grow-1">
+                        {{ story.story|truncatewords:25 }}
+                    </p>
+
+                    <!-- Project Title -->
+                    <div class="mb-3">
+                        <h6 class="text-primary">
+                                                        <i class=\"fas fa-project-diagram\"></i> {{ story.application.project_title }}
+                        </h6>
+                    </div>
+
+                    <!-- Tags and Indicators -->
+                    <div class="mb-3">
+                        {% if story.images.exists %}
+                        <span class="badge bg-info me-1">
+                            <i class="fas fa-images"></i> {{ story.images.count }} Photo{{ story.images.count|pluralize }}
+                        </span>
+                        {% endif %}
+                        {% if story.video_url %}
+                        <span class="badge bg-danger me-1">
+                            <i class="fas fa-video"></i> Video
+                        </span>
+                        {% endif %}
+                        {% if story.is_featured %}
+                        <span class="badge bg-warning">
+                            <i class="fas fa-star"></i> Featured
+                        </span>
+                        {% endif %}
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="mt-auto">
+                        <a href="{% url 'grants:view_success_story' story.id %}" 
+                           class="btn btn-primary">
+                            <i class="fas fa-eye"></i> Read Full Story
+                        </a>
+                        <button class="btn btn-outline-secondary btn-sm float-end" 
+                                onclick="shareStory('{{ story.id }}', '{{ story.title }}')">
+                            <i class="fas fa-share-alt"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12">
+            <div class="card shadow">
+                <div class="card-body text-center py-5">
+                    <i class="fas fa-search fa-3x text-muted mb-3"></i>
+                    <h4>No Success Stories Found</h4>
+                    <p class="text-muted">
+                        {% if request.GET.search %}
+                            No stories match your search criteria. Try adjusting your filters.
+                        {% else %}
+                            No success stories have been shared yet. Be the first to share your story!
+                        {% endif %}
+                    </p>
+                    {% if request.GET.search or request.GET.amount_range or request.GET.sort %}
+                    <a href="{% url 'grants:success_stories' %}" class="btn btn-primary">
+                        <i class="fas fa-refresh"></i> Clear Filters
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Pagination -->
+    {% if is_paginated %}
+    <div class="row mt-4">
+        <div class="col-12">
+            <nav aria-label="Success Stories Pagination">
+                <ul class="pagination justify-content-center">
+                    {% if page_obj.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page=1{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.amount_range %}&amount_range={{ request.GET.amount_range }}{% endif %}{% if request.GET.sort %}&sort={{ request.GET.sort }}{% endif %}">
+                            <i class="fas fa-angle-double-left"></i> First
+                        </a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.amount_range %}&amount_range={{ request.GET.amount_range }}{% endif %}{% if request.GET.sort %}&sort={{ request.GET.sort }}{% endif %}">
+                            <i class="fas fa-angle-left"></i> Previous
+                        </a>
+                    </li>
+                    {% endif %}
+
+                    {% for num in page_obj.paginator.page_range %}
+                    {% if page_obj.number == num %}
+                    <li class="page-item active">
+                        <span class="page-link">{{ num }}</span>
+                    </li>
+                    {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ num }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.amount_range %}&amount_range={{ request.GET.amount_range }}{% endif %}{% if request.GET.sort %}&sort={{ request.GET.sort }}{% endif %}">{{ num }}</a>
+                    </li>
+                    {% endif %}
+                    {% endfor %}
+
+                    {% if page_obj.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.amount_range %}&amount_range={{ request.GET.amount_range }}{% endif %}{% if request.GET.sort %}&sort={{ request.GET.sort }}{% endif %}">
+                            Next <i class="fas fa-angle-right"></i>
+                        </a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.amount_range %}&amount_range={{ request.GET.amount_range }}{% endif %}{% if request.GET.sort %}&sort={{ request.GET.sort }}{% endif %}">
+                            Last <i class="fas fa-angle-double-right"></i>
+                        </a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Call to Action -->
+    <div class="row mt-5">
+        <div class="col-12">
+            <div class="card bg-gradient-primary text-white shadow-lg">
+                <div class="card-body text-center py-5">
+                    <h3><i class="fas fa-edit me-2"></i>Share Your Success Story</h3>
+                    <p class="lead mb-4">
+                        Have you received a grant from the David Johnson Foundation? 
+                        Help inspire others by sharing your journey and impact!
+                    </p>
+                    <a href="{% url 'grants:apply' %}" class="btn btn-light btn-lg me-3">
+                        <i class="fas fa-plus"></i> Apply for a Grant
+                    </a>
+                    <a href="{% url 'grants:status' %}" class="btn btn-outline-light btn-lg">
+                        <i class="fas fa-share-alt"></i> Share Your Story
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.story-card {
+    transition: all 0.3s ease;
+    border: none;
+}
+
+.story-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15) !important;
+}
+
+.bg-gradient-success {
+    background: linear-gradient(45deg, #28a745, #20c997);
+}
+
+.bg-gradient-primary {
+    background: linear-gradient(45deg, #007bff, #6f42c1);
+}
+
+.bg-gradient-info {
+    background: linear-gradient(45deg, #17a2b8, #007bff);
+}
+
+.card-img-top {
+    transition: transform 0.3s ease;
+}
+
+.story-card:hover .card-img-top {
+    transform: scale(1.05);
+}
+
+.badge {
+    font-size: 0.75rem;
+}
+
+.pagination .page-link {
+    border-radius: 8px;
+    margin: 0 2px;
+    border: none;
+    color: #007bff;
+}
+
+.pagination .page-item.active .page-link {
+    background-color: #007bff;
+    border-color: #007bff;
+}
+</style>
+
+<script>
+function shareStory(storyId, storyTitle) {
+    const url = encodeURIComponent(window.location.origin + '/grants/success-story/' + storyId + '/');
+    const text = encodeURIComponent('Check out this inspiring story: ' + storyTitle + ' - David Johnson Foundation');
+    
+    if (navigator.share) {
+        navigator.share({
+            title: storyTitle,
+            text: text,
+            url: url
+        });
+    } else {
+        // Fallback - copy to clipboard
+        navigator.clipboard.writeText(url).then(function() {
+            alert('Story link copied to clipboard!');
+        });
+    }
+}
+
+// Auto-submit form on filter changes
+document.querySelectorAll('select[name="amount_range"], select[name="sort"]').forEach(function(select) {
+    select.addEventListener('change', function() {
+        this.closest('form').submit();
+    });
+});
+</script>
+{% endblock %}

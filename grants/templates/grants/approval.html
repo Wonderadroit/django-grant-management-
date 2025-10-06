@@ -1,0 +1,330 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Grant Approval - Dave Johnson Foundation{% endblock %}
+
+{% block extra_css %}
+<style>
+    .approval-letter {
+        background: white;
+        padding: 40px;
+        margin: 20px 0;
+        border: 1px solid #ddd;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+    
+    .letterhead {
+        text-align: center;
+        border-bottom: 3px solid #667eea;
+        padding-bottom: 20px;
+        margin-bottom: 30px;
+    }
+    
+    .approval-badge {
+        background: linear-gradient(135deg, #28a745, #20c997);
+        color: white;
+        padding: 15px 30px;
+        border-radius: 50px;
+        font-size: 18px;
+        font-weight: bold;
+        display: inline-block;
+        margin: 20px 0;
+    }
+    
+    .next-steps {
+        background: #f8f9fa;
+        border: 2px solid #667eea;
+        border-radius: 10px;
+        padding: 30px;
+        margin: 30px 0;
+    }
+    
+    .contact-buttons {
+        display: flex;
+        gap: 15px;
+        flex-wrap: wrap;
+        justify-content: center;
+        margin: 20px 0;
+    }
+    
+    .btn-whatsapp {
+        background: #25D366;
+        color: white;
+        border: none;
+        padding: 15px 25px;
+        border-radius: 25px;
+        font-weight: bold;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        transition: all 0.3s;
+    }
+    
+    .btn-whatsapp:hover {
+        background: #128C7E;
+        color: white;
+        transform: translateY(-2px);
+    }
+    
+    .btn-email {
+        background: #667eea;
+        color: white;
+        border: none;
+        padding: 15px 25px;
+        border-radius: 25px;
+        font-weight: bold;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        transition: all 0.3s;
+    }
+    
+    .btn-email:hover {
+        background: #5a67d8;
+        color: white;
+        transform: translateY(-2px);
+    }
+    
+    @media print {
+        .no-print { display: none !important; }
+        body { margin: 0; }
+        .approval-letter { box-shadow: none; margin: 0; }
+    }
+    
+    /* Mobile Responsiveness */
+    @media (max-width: 768px) {
+        .approval-letter {
+            padding: 20px 15px;
+            margin: 10px 0;
+        }
+        
+        .letterhead h1 {
+            font-size: 1.5rem;
+        }
+        
+        .approval-badge {
+            padding: 12px 20px;
+            font-size: 16px;
+            text-align: center;
+            width: 100%;
+            margin: 15px 0;
+        }
+        
+        .next-steps {
+            padding: 20px 15px;
+            margin: 20px 0;
+        }
+        
+        .contact-buttons {
+            flex-direction: column;
+            gap: 10px;
+            align-items: stretch;
+        }
+        
+        .btn-whatsapp, .btn-email {
+            justify-content: center;
+            padding: 15px 20px;
+            width: 100%;
+            text-align: center;
+        }
+        
+        .card-body h2 {
+            font-size: 1.5rem;
+        }
+        
+        .container {
+            padding-left: 10px;
+            padding-right: 10px;
+        }
+    }
+    
+    @media (max-width: 576px) {
+        .approval-letter {
+            padding: 15px 10px;
+        }
+        
+        .letterhead {
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .letterhead img {
+            height: 40px !important;
+        }
+        
+        .approval-badge {
+            font-size: 14px;
+            padding: 10px 15px;
+        }
+        
+        .next-steps {
+            padding: 15px 10px;
+        }
+        
+        .card-body {
+            padding: 15px;
+        }
+        
+        h4 {
+            font-size: 1.2rem;
+        }
+        
+        h6 {
+            font-size: 1rem;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            
+            <!-- Action Buttons -->
+            <div class="text-center mb-4 no-print">
+                <button onclick="window.print()" class="btn btn-primary btn-lg me-3">
+                    <i class="fas fa-download me-2"></i>Download Approval Letter
+                </button>
+                <a href="{% url 'grants:status' %}" class="btn btn-outline-secondary btn-lg">
+                    <i class="fas fa-arrow-left me-2"></i>Back to Status
+                </a>
+            </div>
+
+            <!-- Approval Letter -->
+            <div class="approval-letter" id="approval-letter">
+                <!-- Letterhead -->
+                <div class="letterhead">
+                    <img src="{% static 'images/logo.svg' %}" alt="Dave Johnson Foundation" style="height: 60px; margin-bottom: 15px;">
+                    <h1 class="h3 text-primary mb-2">Dave Johnson Foundation</h1>
+                    <p class="text-muted mb-0">Supporting Citizens in Need Through Financial Assistance</p>
+                    <p class="small text-muted">Founded by Dave Johnson • $298.3M Powerball Winner • Since 2019</p>
+                </div>
+
+                <!-- Approval Content -->
+                <div class="approval-content">
+                    <p class="text-end text-muted mb-4">{{ application.approval_date|date:"F d, Y" }}</p>
+                    
+                    <div class="text-center">
+                        <div class="approval-badge">
+                            <i class="fas fa-check-circle me-2"></i>GRANT APPROVED
+                        </div>
+                    </div>
+
+                    <h4 class="text-center mb-4">Congratulations, {{ application.full_name }}!</h4>
+
+                    <p>Dear {{ application.full_name }},</p>
+
+                    <p>It is with great pleasure that the Dave Johnson Foundation officially approves your grant application for <strong>"{{ application.project_title }}"</strong>.</p>
+
+                    <div class="row my-4">
+                        <div class="col-md-6">
+                            <div class="card border-success">
+                                <div class="card-body text-center">
+                                    <h5 class="card-title text-success">Approved Amount</h5>
+                                    <h2 class="text-success">${{ application.approved_amount|default:application.amount_requested|floatformat:0 }}</h2>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card border-info">
+                                <div class="card-body text-center">
+                                    <h5 class="card-title text-info">Grant ID</h5>
+                                    <h2 class="text-info">DJF-{{ application.id|stringformat:"04d" }}</h2>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <p><strong>Project Category:</strong> {{ application.get_project_category_display }}</p>
+                    <p><strong>Project Duration:</strong> {{ application.project_duration }}</p>
+                    
+                    {% if application.approval_notes %}
+                    <div class="mt-4">
+                        <h6><strong>Approval Notes:</strong></h6>
+                        <p class="text-muted">{{ application.approval_notes }}</p>
+                    </div>
+                    {% endif %}
+
+                    <p class="mt-4">Your application stood out due to its clear demonstration of need and potential for positive impact in the community. As someone who has experienced financial challenges firsthand, I understand the importance of this assistance.</p>
+
+                    <p>This grant award reflects our foundation's commitment to supporting citizens facing financial hardship and helping them achieve stability and success.</p>
+
+                    <div class="mt-5">
+                        <p>Warm regards,</p>
+                        <div class="mt-3">
+                            <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjQwIiB2aWV3Qm94PSIwIDAgMTUwIDQwIiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8dGV4dCB4PSIwIiB5PSIyNSIgZm9udC1mYW1pbHk9IkN1cnNpdmUsIHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMjAiIGZvbnQtd2VpZ2h0PSJib2xkIiBmaWxsPSIjNjY3ZWVhIj5EYXZlIEpvaG5zb248L3RleHQ+Cjwvc3ZnPgo=" alt="Dave Johnson Signature" style="margin: 10px 0;">
+                            <p class="mb-0"><strong>Dave Johnson</strong></p>
+                            <p class="text-muted small">Founder & Chairman<br>Dave Johnson Foundation</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Next Steps Section -->
+            <div class="next-steps no-print">
+                <h4 class="text-center mb-4">
+                    <i class="fas fa-arrow-right text-primary me-2"></i>Next Steps
+                </h4>
+                
+                <div class="row">
+                    <div class="col-md-6">
+                        <h6><i class="fas fa-check-circle text-success me-2"></i>What Happens Next:</h6>
+                        <ul class="list-unstyled">
+                            <li class="mb-2">✅ Your approval letter is ready for download</li>
+                            <li class="mb-2">✅ Grant processing will begin within 2-3 business days</li>
+                            <li class="mb-2">✅ You'll receive fund disbursement details via WhatsApp/Email</li>
+                            <li class="mb-2">✅ Reporting requirements will be shared with you</li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6">
+                        <h6><i class="fas fa-phone text-info me-2"></i>Contact for Next Steps:</h6>
+                        <p class="small text-muted mb-3">Please contact our grants team immediately to proceed with fund disbursement:</p>
+                        
+                        <div class="contact-buttons">
+                            <a href="https://wa.me/18722281570?text=Hi! I'm {{ application.full_name }} and my grant application (ID: DJF-{{ application.id|stringformat:"04d" }}) for ${{ application.approved_amount|default:application.amount_requested|floatformat:0 }} has been approved. I need to proceed with the next steps for fund disbursement. Please guide me through the process." 
+                               class="btn-whatsapp" target="_blank">
+                                <i class="fab fa-whatsapp"></i>Continue on WhatsApp
+                            </a>
+                            
+                            <a href="mailto:grantdavejohnsonfoundation@gmail.com?subject=Grant Approved - Next Steps Required (ID: DJF-{{ application.id|stringformat:"04d" }})&body=Dear David Johnson Foundation,%0D%0A%0D%0AMy name is {{ application.full_name }} and I'm writing to proceed with the next steps for my approved grant.%0D%0A%0D%0AGrant Details:%0D%0A- Grant ID: DJF-{{ application.id|stringformat:"04d" }}%0D%0A- Approved Amount: ${{ application.approved_amount|default:application.amount_requested|floatformat:0 }}%0D%0A- Project: {{ application.project_title }}%0D%0A%0D%0APlease let me know what documents or information you need from me to proceed with the fund disbursement.%0D%0A%0D%0AThank you!%0D%0A%0D%0ABest regards,%0D%0A{{ application.full_name }}%0D%0A{{ application.email }}%0D%0A{{ application.phone }}" 
+                               class="btn-email">
+                                <i class="fas fa-envelope"></i>Continue via Email
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="alert alert-warning mt-4">
+                    <h6><i class="fas fa-clock me-2"></i>Important Notice:</h6>
+                    <p class="mb-0">To secure your approved funds, please contact us within <strong>7 days</strong> of this approval. Delayed contact may require re-verification of your application status.</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+// Auto-scroll to approval letter on load
+window.addEventListener('load', function() {
+    document.getElementById('approval-letter').scrollIntoView({ behavior: 'smooth', block: 'start' });
+});
+
+// Print functionality
+function printApproval() {
+    window.print();
+}
+
+// Track link clicks for analytics
+document.querySelectorAll('.btn-whatsapp, .btn-email').forEach(button => {
+    button.addEventListener('click', function() {
+        console.log('Next step clicked:', this.className);
+        // Add analytics tracking here if needed
+    });
+});
+</script>
+
+{% endblock %}

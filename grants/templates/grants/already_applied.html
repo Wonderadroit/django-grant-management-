@@ -1,0 +1,148 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Application Already Submitted - David Johnson Foundation{% endblock %}
+
+{% block extra_css %}
+<style>
+    body {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    .container-custom {
+        padding-top: 4rem;
+        padding-bottom: 4rem;
+    }
+    .card {
+        border-radius: 15px;
+        box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        border: none;
+        background: white;
+    }
+    .card-header {
+        border-radius: 15px 15px 0 0 !important;
+        background: linear-gradient(45deg, #f39c12, #e67e22);
+        color: white;
+        text-align: center;
+        padding: 2rem;
+    }
+    .card-body {
+        padding: 3rem;
+    }
+    .badge {
+        font-size: 0.9em;
+        padding: 0.5em 1em;
+    }
+    .list-unstyled li {
+        padding: 0.5rem 0;
+        border-bottom: 1px solid #f1f1f1;
+        font-size: 1.1em;
+    }
+    .list-unstyled li:last-child {
+        border-bottom: none;
+    }
+    .btn-lg {
+        padding: 0.8rem 2rem;
+        font-size: 1.1em;
+        border-radius: 10px;
+    }
+    .alert {
+        border-radius: 10px;
+        border: none;
+    }
+    h4, h5, h6 {
+        color: #2c3e50;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-custom">
+    <div class="row justify-content-center">
+        <div class="col-lg-8 col-md-10">
+            <div class="card shadow-lg border-0">
+                <div class="card-header bg-warning text-white text-center py-4">
+                    <i class="fas fa-exclamation-triangle fa-3x mb-3"></i>
+                    <h2 class="mb-0">Application Already Submitted</h2>
+                </div>
+                
+                <div class="card-body p-5">
+                    <div class="alert alert-warning" role="alert">
+                        <h4 class="alert-heading">
+                            <i class="fas fa-info-circle me-2"></i>
+                            One Application Per Person Policy
+                        </h4>
+                        <p class="mb-0">
+                            You have already submitted a grant application. Our policy allows only 
+                            <strong>one application per person</strong> to ensure fair distribution of grants.
+                        </p>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h5><i class="fas fa-file-alt me-2"></i>Your Application Details</h5>
+                            <ul class="list-unstyled">
+                                <li><strong>Application ID:</strong> DJF-{{ grant.id|stringformat:"04d" }}</li>
+                                <li><strong>Project Title:</strong> {{ grant.project_title }}</li>
+                                <li><strong>Amount Requested:</strong> ${{ grant.amount_requested|floatformat:0 }}</li>
+                                <li><strong>Status:</strong> 
+                                    <span class="badge 
+                                        {% if grant.status == 'pending' %}bg-warning
+                                        {% elif grant.status == 'approved' %}bg-success
+                                        {% elif grant.status == 'rejected' %}bg-danger
+                                        {% else %}bg-secondary{% endif %}">
+                                        {{ grant.status|title }}
+                                    </span>
+                                </li>
+                                <li><strong>Submitted:</strong> {{ grant.created_at|date:"F d, Y" }}</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <h5><i class="fas fa-clock me-2"></i>What's Next?</h5>
+                            <ul class="list-unstyled">
+                                {% if grant.status == 'pending' %}
+                                <li><i class="fas fa-hourglass-half me-2 text-warning"></i>Your application is under review</li>
+                                <li><i class="fas fa-email me-2 text-info"></i>You'll receive email updates</li>
+                                <li><i class="fas fa-calendar me-2 text-primary"></i>Review typically takes 24 hours</li>
+                                {% elif grant.status == 'approved' %}
+                                <li><i class="fas fa-check-circle me-2 text-success"></i>Congratulations! Your grant was approved</li>
+                                <li><i class="fas fa-download me-2 text-primary"></i>Download your approval letter</li>
+                                <li><i class="fas fa-money-bill-wave me-2 text-success"></i>Funds will be disbursed soon</li>
+                                {% elif grant.status == 'rejected' %}
+                                <li><i class="fas fa-times-circle me-2 text-danger"></i>Unfortunately, your application was not approved</li>
+                                <li><i class="fas fa-envelope me-2 text-info"></i>Check your email for feedback</li>
+                                <li><i class="fas fa-calendar me-2 text-primary"></i>You may reapply in future cycles</li>
+                                {% endif %}
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="row mt-4">
+                        <div class="col-12 text-center">
+                            <a href="{% url 'grants:status' %}" class="btn btn-primary btn-lg me-3">
+                                <i class="fas fa-chart-line me-2"></i>Check Application Status
+                            </a>
+                            {% if grant.status == 'approved' %}
+                            <a href="{% url 'grants:approval' %}" class="btn btn-success btn-lg">
+                                <i class="fas fa-download me-2"></i>Download Approval Letter
+                            </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                    <div class="mt-4 pt-4 border-top">
+                        <h6><i class="fas fa-question-circle me-2"></i>Need Help?</h6>
+                        <p class="text-muted mb-0">
+                            If you have questions about your application or need to make changes, 
+                            please contact us at <a href="mailto:grantdavejohnsonfoundation@gmail.com">grantdavejohnsonfoundation@gmail.com</a> 
+                            or call our support line.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

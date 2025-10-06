@@ -64,5 +64,21 @@ $ # Access the web app in browser: http://127.0.0.1:8000/
 
 <br />
 
+## Developer notes
+
+- Fix migrated placeholder emails: `python manage.py fix_grant_emails`
+- Development email backend prints emails to the console (see `core/settings.py`).
+- Admin actions for `GrantApplication` allow marking approved/rejected and will send emails (console backend in dev).
+
+## Deployment & Security (recommendations)
+
+- Keep `SECRET_KEY` out of source control. Use environment variables or a secrets manager and set `SECRET_KEY` in your environment (see `.env.example`).
+- Set `DEBUG=False` in production and add your domain(s) to `ALLOWED_HOSTS`.
+- Use HTTPS in production. Enable `SECURE_SSL_REDIRECT`, set `SESSION_COOKIE_SECURE=True`, and `CSRF_COOKIE_SECURE=True`.
+- Configure a proper email backend for production (SMTP, SendGrid, etc.).
+- Use a production-ready server (Gunicorn / Daphne) behind a reverse proxy (Nginx).
+- Regularly run security checks: `python manage.py check --deploy` and fix any issues.
+
+
 ---
 [Django Boilerplate](https://www.youtube.com/watch?v=bGGDGltRT_g) - provided by **AppSeed**

@@ -1,0 +1,1566 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Grant Application - David Johnson Foundation{% endblock %}
+
+{% block extra_css %}
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="{% static 'assets/css/enhanced-animations.css' %}" rel="stylesheet">
+<style>
+    /* Clean Foundation Styling with Mobile Responsiveness */
+    * {
+        box-sizing: border-box;
+    }
+    
+    body {
+        background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%) !important;
+        font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif !important;
+        min-height: 100vh;
+        margin: 0;
+        padding: 0;
+    }
+
+    .foundation-header {
+        background: linear-gradient(135deg, #1e40af 0%, #3b82f6 50%, #60a5fa 100%);
+        color: white;
+        padding: 3rem 1rem;
+        margin-bottom: 2rem;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .foundation-header::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+        opacity: 0.3;
+    }
+
+    .foundation-header * {
+        position: relative;
+        z-index: 1;
+    }
+
+    .foundation-header h1 {
+        font-size: 2.5rem;
+        font-weight: 800;
+        margin-bottom: 0.5rem;
+        text-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        letter-spacing: -0.025em;
+    }
+
+    .foundation-header .lead {
+        font-size: 1.125rem;
+        opacity: 0.95;
+        font-weight: 400;
+    }
+
+    .welcome-section {
+        background: linear-gradient(135deg, #ffffff 0%, #f1f5f9 100%);
+        border: 1px solid #e2e8f0;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        padding: 2.5rem;
+        margin-bottom: 3rem;
+        border-radius: 16px;
+        position: relative;
+    }
+
+    .welcome-section::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, #3b82f6, #8b5cf6, #06b6d4);
+        border-radius: 16px 16px 0 0;
+    }
+
+    .welcome-section h2 {
+        color: #1e40af;
+        font-weight: 700;
+        font-size: 1.875rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .welcome-section h3 {
+        color: #6366f1;
+        font-weight: 600;
+        font-size: 1.25rem;
+        margin-bottom: 1rem;
+    }
+
+    .welcome-section p {
+        color: #64748b;
+        font-size: 1.125rem;
+        line-height: 1.7;
+        margin: 0;
+    }
+
+    /* Form Container */
+    .form-container {
+        max-width: 960px;
+        margin: 0 auto 3rem;
+        background: white;
+        border-radius: 24px;
+        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        overflow: hidden;
+        border: 1px solid #e2e8f0;
+    }
+
+    .form-section {
+        padding: 2.5rem 3rem;
+        border-bottom: 1px solid #f1f5f9;
+        position: relative;
+        background: #ffffff;
+    }
+
+    .form-section:last-child {
+        border-bottom: none;
+    }
+
+    .form-section::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 5px;
+        background: linear-gradient(180deg, #3b82f6, #8b5cf6);
+        opacity: 1;
+    }
+
+    .section-title {
+        color: #0f172a;
+        font-weight: 700;
+        font-size: 1.625rem;
+        margin-bottom: 2.25rem;
+        padding-bottom: 1rem;
+        border-bottom: 2px solid #e2e8f0;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        letter-spacing: -0.025em;
+    }
+
+    .section-title i {
+        color: #3b82f6;
+        font-size: 1.5rem;
+        width: 32px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+        border-radius: 8px;
+    }
+
+    /* Enhanced Form Controls */
+    .form-label {
+        font-weight: 600 !important;
+        color: #1f2937 !important;
+        margin-bottom: 0.625rem !important;
+        font-size: 0.9375rem !important;
+        letter-spacing: -0.0125em;
+        display: block;
+    }
+
+    .required-star {
+        color: #ef4444;
+        font-weight: bold;
+        margin-left: 4px;
+        font-size: 1.125rem;
+    }
+
+    .form-control, .form-select {
+        border: 2px solid #e5e7eb !important;
+        border-radius: 10px !important;
+        padding: 0.875rem 1.125rem !important;
+        font-size: 0.9375rem !important;
+        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        background-color: #ffffff !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+        font-weight: 400;
+        color: #111827;
+        line-height: 1.5;
+    }
+
+    .form-control:focus, .form-select:focus {
+        border-color: #3b82f6 !important;
+        box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1) !important;
+        outline: 0 !important;
+        background-color: #ffffff !important;
+        transform: translateY(-1px);
+    }
+
+    /* Baseline styling for native fields (if no .form-control class present) */
+    .form-container input[type="text"],
+    .form-container input[type="email"],
+    .form-container input[type="tel"],
+    .form-container input[type="number"],
+    .form-container input[type="date"],
+    .form-container input[type="url"],
+    .form-container input[type="password"],
+    .form-container textarea,
+    .form-container select {
+        border: 2px solid #e5e7eb !important;
+        border-radius: 10px !important;
+        padding: 0.875rem 1.125rem !important;
+        font-size: 0.9375rem !important;
+        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        background-color: #ffffff !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+        font-weight: 400;
+        color: #111827;
+        line-height: 1.5;
+    }
+
+    .form-container input[type="text"]:focus,
+    .form-container input[type="email"]:focus,
+    .form-container input[type="tel"]:focus,
+    .form-container input[type="number"]:focus,
+    .form-container input[type="date"]:focus,
+    .form-container input[type="url"]:focus,
+    .form-container input[type="password"]:focus,
+    .form-container textarea:focus,
+    .form-container select:focus {
+        border-color: #3b82f6 !important;
+        box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1) !important;
+        outline: 0 !important;
+        background-color: #ffffff !important;
+        transform: translateY(-1px);
+    }
+
+    .form-control::placeholder {
+        color: #9ca3af !important;
+        opacity: 1 !important;
+        font-weight: 400;
+    }
+
+    /* Text Areas */
+    textarea.form-control,
+    .form-container textarea {
+        min-height: 140px !important;
+        resize: vertical !important;
+        line-height: 1.625 !important;
+        font-family: inherit !important;
+    }
+
+    /* Help Text */
+    .help-text {
+        font-size: 0.8125rem;
+        color: #6b7280;
+        margin-top: 0.5rem;
+        font-style: normal;
+        line-height: 1.5;
+        display: block;
+    }
+
+    /* Error styles */
+    .invalid-feedback,
+    .field-error {
+        color: #dc2626 !important;
+        font-size: 0.8125rem;
+        margin-top: 0.5rem;
+        font-weight: 500;
+        display: block;
+    }
+    
+    .error-summary {
+        border: 2px solid #fca5a5;
+        background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+        color: #991b1b;
+        padding: 1.25rem 1.5rem;
+        border-radius: 12px;
+        margin-bottom: 0;
+        box-shadow: 0 4px 6px rgba(220, 38, 38, 0.1);
+    }
+    
+    .error-summary h4 {
+        margin: 0 0 0.75rem 0;
+        font-weight: 700;
+        font-size: 1rem;
+        color: #7f1d1d;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    
+    .error-summary ul { 
+        margin: 0; 
+        padding-left: 1.5rem;
+        line-height: 1.6;
+    }
+    
+    .error-summary li {
+        margin-bottom: 0.375rem;
+    }
+
+    /* Grid Layout */
+    .row {
+        margin-left: -12px !important;
+        margin-right: -12px !important;
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    .col-12, .col-md-6 {
+        padding-left: 12px !important;
+        padding-right: 12px !important;
+        margin-bottom: 2rem !important;
+        width: 100%;
+    }
+    
+    @media (min-width: 768px) {
+        .col-md-6 {
+            width: 50%;
+            flex: 0 0 50%;
+        }
+    }
+
+    /* Enhanced Button Styling */
+    .btn-submit {
+        background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%) !important;
+        border: none !important;
+        padding: 1rem 3rem !important;
+        border-radius: 12px !important;
+        font-weight: 600 !important;
+        font-size: 1.125rem !important;
+        color: white !important;
+        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        box-shadow: 0 4px 14px 0 rgba(59, 130, 246, 0.4) !important;
+        letter-spacing: -0.025em;
+        min-width: 200px;
+    }
+
+    .btn-submit:hover {
+        transform: translateY(-2px) !important;
+        box-shadow: 0 10px 25px rgba(59, 130, 246, 0.4) !important;
+        color: white !important;
+        background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%) !important;
+    }
+
+    .btn-submit:active {
+        transform: translateY(0) !important;
+    }
+
+    /* Confirmation Section */
+    .confirmation-section {
+        background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%) !important;
+        border: 2px solid #10b981 !important;
+        padding: 2rem 2.5rem !important;
+        border-radius: 14px !important;
+        margin: 2.5rem 0 0 !important;
+        text-align: center !important;
+        position: relative;
+        box-shadow: 0 4px 6px rgba(16, 185, 129, 0.1);
+    }
+
+    .confirmation-section::before {
+        content: '✓';
+        position: absolute;
+        top: -18px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: linear-gradient(135deg, #10b981, #059669);
+        color: white;
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        font-size: 18px;
+        box-shadow: 0 4px 6px rgba(16, 185, 129, 0.3);
+    }
+
+    .confirmation-section .form-check {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 0.875rem !important;
+        margin: 0;
+    }
+
+    .confirmation-section .form-check-input {
+        transform: scale(1.5) !important;
+        margin: 0 !important;
+        accent-color: #10b981;
+        cursor: pointer;
+    }
+
+    .confirmation-section .form-check-label {
+        font-weight: 600 !important;
+        color: #065f46 !important;
+        margin: 0 !important;
+        font-size: 1.0625rem;
+        cursor: pointer;
+        user-select: none;
+    }
+
+    /* Professional Card Styling */
+    .info-card {
+        background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+        border: 1px solid #bfdbfe;
+        border-radius: 12px;
+        padding: 1.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .info-card h4 {
+        color: #1e40af;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+    }
+
+    .info-card p {
+        color: #1e3a8a;
+        margin: 0;
+        font-size: 0.95rem;
+        line-height: 1.5;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .foundation-header {
+            padding: 2.5rem 1rem;
+        }
+
+        .foundation-header h1 {
+            font-size: 2rem;
+        }
+        
+        .foundation-header .lead {
+            font-size: 1rem;
+        }
+
+        .form-section {
+            padding: 2rem 1.5rem;
+        }
+
+        .section-title {
+            font-size: 1.375rem;
+        }
+        
+        .section-title i {
+            font-size: 1.25rem;
+            width: 28px;
+            height: 28px;
+        }
+
+        .col-md-6 {
+            margin-bottom: 1.5rem !important;
+        }
+
+        .welcome-section {
+            padding: 1.75rem;
+            margin-bottom: 2rem;
+        }
+
+        .form-container {
+            margin: 0 1rem 2rem;
+            border-radius: 16px;
+        }
+        
+        .wizard-top {
+            padding: 1.5rem 1.5rem 1rem;
+        }
+        
+        .wizard-nav {
+            padding: 1.5rem;
+            flex-direction: column-reverse;
+        }
+        
+        .wizard-nav button {
+            width: 100%;
+        }
+        
+        .stepper {
+            grid-template-columns: repeat(6, 1fr);
+            gap: 0.25rem;
+        }
+        
+        .stepper .step {
+            width: 32px;
+            height: 32px;
+            font-size: 0.875rem;
+        }
+        
+        .stepper .label {
+            font-size: 0.65rem;
+            display: none;
+        }
+        
+        .stepper li.active .label {
+            display: block;
+        }
+    }
+
+    /* Remove any conflicting styles */
+    .main-content, .sidenav, .navbar-vertical {
+        display: none !important;
+    }
+
+    /* Ensure full width layout */
+    .container {
+        max-width: 1200px !important;
+        padding: 0 1rem !important;
+    }
+
+    /* Wizard / Stepper */
+    .wizard-top { 
+        padding: 2rem 3rem 1.5rem; 
+        background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+        border-bottom: 1px solid #e2e8f0;
+    }
+    
+    .progress { 
+        height: 6px; 
+        background: #e5e7eb; 
+        border-radius: 999px; 
+        overflow: hidden;
+        box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
+    }
+    
+    .progress-bar { 
+        background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+        transition: width 0.3s ease;
+    }
+
+    .stepper { 
+        list-style: none; 
+        display: grid; 
+        grid-template-columns: repeat(6, 1fr); 
+        gap: 0.75rem; 
+        margin: 1.25rem 0 0; 
+        padding: 0; 
+    }
+    
+    .stepper li { 
+        text-align: center;
+        transition: all 0.2s ease;
+    }
+    
+    .stepper .step {
+        display: inline-flex; 
+        align-items: center; 
+        justify-content: center; 
+        width: 42px; 
+        height: 42px; 
+        border-radius: 50%;
+        background: #f3f4f6; 
+        color: #9ca3af; 
+        font-weight: 700; 
+        font-size: 1.125rem;
+        margin-bottom: 0.5rem;
+        border: 2px solid transparent;
+        transition: all 0.2s ease;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    
+    .stepper .label { 
+        font-size: 0.75rem; 
+        color: #9ca3af; 
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 0.025em;
+        transition: all 0.2s ease;
+    }
+    
+    .stepper li.active .step { 
+        background: linear-gradient(135deg, #3b82f6, #2563eb);
+        color: #fff; 
+        border-color: #3b82f6;
+        box-shadow: 0 4px 6px rgba(59, 130, 246, 0.3), 0 0 0 4px rgba(59, 130, 246, 0.1);
+        transform: scale(1.05);
+    }
+    
+    .stepper li.completed .step { 
+        background: linear-gradient(135deg, #10b981, #059669);
+        color: #fff;
+        border-color: #10b981;
+    }
+    
+    .stepper li.active .label { 
+        color: #111827; 
+        font-weight: 700;
+    }
+    
+    .stepper li.completed .label {
+        color: #059669;
+        font-weight: 600;
+    }
+
+    .wizard-nav { 
+        display: flex; 
+        align-items: center; 
+        justify-content: space-between; 
+        gap: 1rem; 
+        padding: 2rem 3rem;
+        background: #fafbfc;
+        border-top: 1px solid #f1f5f9;
+    }
+    
+    .btn-next, .btn-submit { 
+        background: linear-gradient(135deg, #3b82f6, #1d4ed8) !important; 
+        color: #fff !important; 
+        border: none !important; 
+        padding: 0.875rem 2rem !important; 
+        border-radius: 12px !important; 
+        font-weight: 600 !important;
+        font-size: 1rem !important;
+        box-shadow: 0 4px 6px rgba(59, 130, 246, 0.2) !important;
+        transition: all 0.2s ease !important;
+        cursor: pointer;
+        letter-spacing: -0.025em;
+    }
+    
+    .btn-next:hover, .btn-submit:hover { 
+        transform: translateY(-2px) !important;
+        box-shadow: 0 6px 12px rgba(59, 130, 246, 0.3) !important;
+    }
+    
+    .btn-back { 
+        background: #ffffff !important; 
+        color: #374151 !important; 
+        border: 2px solid #e5e7eb !important; 
+        padding: 0.875rem 2rem !important; 
+        border-radius: 12px !important; 
+        font-weight: 600 !important;
+        font-size: 1rem !important;
+        transition: all 0.2s ease !important;
+        cursor: pointer;
+        letter-spacing: -0.025em;
+    }
+    
+    .btn-back:hover {
+        background: #f9fafb !important;
+        border-color: #d1d5db !important;
+        transform: translateY(-1px) !important;
+    }
+
+    /* Step panels - FORCE display override for wizard functionality */
+    .form-step { 
+        display: none !important;
+        animation: fadeIn 0.3s ease-in;
+        opacity: 0;
+        position: relative;
+        z-index: 1;
+    }
+    
+    .form-step.active { 
+        display: block !important;
+        opacity: 1;
+    }
+    
+    /* Force display via inline style (for JavaScript control) */
+    .form-step[style*="display: block"] {
+        display: block !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+    }
+    
+    .form-step[style*="display: none"] {
+        display: none !important;
+        opacity: 0 !important;
+        visibility: hidden !important;
+    }
+    
+    /* Ensure only one step is visible at a time */
+    .form-step:not(.active):not([style*="display: block"]) {
+        display: none !important;
+    }
+    
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Segment color accents using the existing left bar */
+    .form-step .form-section::before { opacity: 1; }
+    .segment-blue   .form-section::before { background: linear-gradient(180deg, #3b82f6 0%, #2563eb 50%, #1d4ed8 100%); }
+    .segment-violet .form-section::before { background: linear-gradient(180deg, #8b5cf6 0%, #7c3aed 50%, #6d28d9 100%); }
+    .segment-emerald .form-section::before { background: linear-gradient(180deg, #10b981 0%, #059669 50%, #047857 100%); }
+    .segment-amber  .form-section::before { background: linear-gradient(180deg, #f59e0b 0%, #d97706 50%, #b45309 100%); }
+    .segment-indigo .form-section::before { background: linear-gradient(180deg, #6366f1 0%, #4f46e5 50%, #4338ca 100%); }
+    .segment-slate  .form-section::before { background: linear-gradient(180deg, #475569 0%, #334155 50%, #1e293b 100%); }
+
+    /* Mobile Responsive Styles */
+    @media (max-width: 1024px) {
+        .form-container {
+            max-width: 100%;
+            margin: 0 1rem 2rem;
+            border-radius: 16px;
+        }
+        
+        .stepper-container {
+            padding: 1.5rem 1rem;
+        }
+        
+        .progress-stepper {
+            gap: 0.75rem;
+        }
+        
+        .step-item {
+            min-width: 80px;
+        }
+        
+        .step-number {
+            width: 40px;
+            height: 40px;
+            font-size: 0.875rem;
+        }
+        
+        .step-label {
+            font-size: 0.75rem;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .foundation-header {
+            padding: 2rem 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .foundation-header h1 {
+            font-size: 2rem;
+        }
+        
+        .foundation-header .lead {
+            font-size: 1rem;
+        }
+        
+        .form-container {
+            margin: 0 0.5rem 1.5rem;
+            border-radius: 12px;
+        }
+        
+        .form-section {
+            padding: 1.5rem 1.25rem;
+        }
+        
+        .stepper-container {
+            padding: 1rem 0.5rem;
+        }
+        
+        .progress-stepper {
+            flex-direction: column;
+            gap: 0.5rem;
+            align-items: stretch;
+        }
+        
+        .step-item {
+            flex-direction: row;
+            align-items: center;
+            padding: 0.75rem;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            margin-bottom: 0.5rem;
+            min-width: auto;
+        }
+        
+        .step-number {
+            width: 36px;
+            height: 36px;
+            margin-right: 0.75rem;
+            margin-bottom: 0;
+            font-size: 0.8rem;
+        }
+        
+        .step-label {
+            font-size: 0.875rem;
+            margin: 0;
+            text-align: left;
+        }
+        
+        .navigation-buttons {
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+        
+        .nav-btn {
+            width: 100%;
+            padding: 0.875rem 1.5rem;
+            font-size: 0.9rem;
+        }
+        
+        .form-group {
+            margin-bottom: 1.25rem;
+        }
+        
+        .form-container input,
+        .form-container textarea,
+        .form-container select {
+            padding: 0.875rem;
+            font-size: 0.9rem;
+            min-height: 48px; /* Touch-friendly */
+        }
+        
+        .form-container textarea {
+            min-height: 120px;
+        }
+        
+        .form-label {
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .segment-header h2 {
+            font-size: 1.5rem;
+        }
+        
+        .segment-header .segment-description {
+            font-size: 0.875rem;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .foundation-header {
+            padding: 1.5rem 0.25rem;
+            margin-bottom: 1rem;
+        }
+        
+        .foundation-header h1 {
+            font-size: 1.5rem;
+        }
+        
+        .foundation-header .lead {
+            font-size: 0.875rem;
+        }
+        
+        .form-container {
+            margin: 0 0.25rem 1rem;
+            border-radius: 8px;
+        }
+        
+        .form-section {
+            padding: 1rem 0.75rem;
+        }
+        
+        .stepper-container {
+            padding: 0.75rem 0.25rem;
+        }
+        
+        .step-item {
+            padding: 0.5rem;
+        }
+        
+        .step-number {
+            width: 32px;
+            height: 32px;
+            margin-right: 0.5rem;
+            font-size: 0.75rem;
+        }
+        
+        .step-label {
+            font-size: 0.8rem;
+        }
+        
+        .nav-btn {
+            padding: 0.75rem 1rem;
+            font-size: 0.875rem;
+        }
+        
+        .form-container input,
+        .form-container textarea,
+        .form-container select {
+            padding: 0.75rem;
+            font-size: 0.875rem;
+        }
+        
+        .form-label {
+            font-size: 0.875rem;
+        }
+        
+        .segment-header h2 {
+            font-size: 1.25rem;
+        }
+        
+        .segment-header .segment-description {
+            font-size: 0.8rem;
+        }
+        
+        .form-group {
+            margin-bottom: 1rem;
+        }
+    }
+
+    /* Touch device optimizations */
+    @media (hover: none) and (pointer: coarse) {
+        .form-container input,
+        .form-container textarea,
+        .form-container select {
+            min-height: 52px; /* Larger touch targets */
+        }
+        
+        .nav-btn {
+            min-height: 52px;
+        }
+        
+        .step-number {
+            min-width: 44px;
+            min-height: 44px;
+        }
+        
+        /* Disable hover effects on touch devices */
+        .nav-btn:hover {
+            transform: none;
+        }
+        
+        .step-item:hover {
+            transform: none;
+        }
+    }
+
+    /* Landscape orientation on mobile */
+    @media (max-width: 768px) and (orientation: landscape) {
+        .foundation-header {
+            padding: 1rem 0.5rem;
+        }
+        
+        .progress-stepper {
+            flex-direction: row;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .step-item {
+            flex-direction: column;
+            text-align: center;
+            flex: 0 0 auto;
+            max-width: 120px;
+        }
+        
+        .step-number {
+            margin-right: 0;
+            margin-bottom: 0.25rem;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Foundation Header -->
+<div class="foundation-header">
+    <div class="container">
+        <h1>David Johnson Foundation</h1>
+        <p class="lead">Empowering Individual Impact - Grant Application Portal</p>
+    </div>
+</div>
+
+<!-- Main Content -->
+<div class="container">
+    <!-- Welcome Section -->
+    <div class="welcome-section">
+        <h2>Individual Grant Application</h2>
+        <h3>David Johnson Foundation Grant Program</h3>
+        <p>Welcome to our individual grant program designed to support personal projects and initiatives that create positive community impact. Please complete all sections carefully. Applications are reviewed within 24 hours, and successful grants are processed and paid within 2-4 weeks.</p>
+        
+        <div class="info-card">
+            <h4>✨ Individual Focus</h4>
+            <p>This grant is specifically designed for individual applicants pursuing personal projects, initiatives, or endeavors that will benefit their community or field of work.</p>
+        </div>
+        
+        <div class="info-card">
+            <h4>⚡ Fast Processing</h4>
+            <p><strong>Review:</strong> 24 hours | <strong>Processing & Payment:</strong> 2-4 weeks upon approval</p>
+        </div>
+    </div>
+
+    <!-- Application Form -->
+    <div class="form-container">
+        
+        <form method="post" id="grantApplicationForm" novalidate>
+            {% csrf_token %}
+            <div class="wizard-top">
+                <div class="progress" aria-label="Form progress">
+                    <div class="progress-bar" 
+                         role="progressbar" 
+                         style="width: 0%" 
+                         aria-valuenow="0" 
+                         aria-valuemin="0" 
+                         aria-valuemax="100"
+                         aria-label="Grant application progress"
+                         title="Application completion progress"></div>
+                </div>
+                <ul class="stepper" id="wizardStepper" role="tablist" aria-label="Grant application steps">
+                    <li class="active" role="tab" id="tab-1" aria-selected="true" aria-controls="step-1" tabindex="0">
+                        <div class="step">1</div><div class="label">Personal</div>
+                    </li>
+                    <li role="tab" id="tab-2" aria-selected="false" aria-controls="step-2" tabindex="-1">
+                        <div class="step">2</div><div class="label">Project</div>
+                    </li>
+                    <li role="tab" id="tab-3" aria-selected="false" aria-controls="step-3" tabindex="-1">
+                        <div class="step">3</div><div class="label">Financial</div>
+                    </li>
+                    <li role="tab" id="tab-4" aria-selected="false" aria-controls="step-4" tabindex="-1">
+                        <div class="step">4</div><div class="label">Timeline</div>
+                    </li>
+                    <li role="tab" id="tab-5" aria-selected="false" aria-controls="step-5" tabindex="-1">
+                        <div class="step">5</div><div class="label">Experience</div>
+                    </li>
+                    <li role="tab" id="tab-6" aria-selected="false" aria-controls="step-6" tabindex="-1">
+                        <div class="step">6</div><div class="label">Additional</div>
+                    </li>
+                </ul>
+            </div>
+            {% if form.errors %}
+            <div class="form-section" style="padding-bottom: 1.5rem; border-bottom: none;">
+                <div class="error-summary">
+                    <h4><i class="fas fa-exclamation-triangle me-2"></i>Please correct the errors below</h4>
+                    <ul>
+                        {% for field in form %}
+                            {% for error in field.errors %}
+                                <li><strong>{{ field.label }}:</strong> {{ error }}</li>
+                            {% endfor %}
+                        {% endfor %}
+                        {% for error in form.non_field_errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+            {% endif %}
+            
+            <!-- Step 1: Personal -->
+            <div class="form-step segment-blue active" data-step="1" id="step-1" role="tabpanel" aria-labelledby="tab-1">
+            <div class="form-section">
+                <h3 class="section-title">
+                    <i class="fas fa-user"></i>Personal Information
+                </h3>
+                
+                <div class="row">
+                    <div class="col-12">
+                        <label for="{{ form.full_name.id_for_label }}" class="form-label">
+                            Full Name <span class="required-star">*</span>
+                        </label>
+                        {{ form.full_name }}
+                        {% if form.full_name.errors %}
+                            <div class="field-error">{{ form.full_name.errors|striptags }}</div>
+                        {% endif %}
+                        <div class="help-text">Enter your full legal name as it appears on official documents</div>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <label for="{{ form.email.id_for_label }}" class="form-label">
+                            Email Address <span class="required-star">*</span>
+                        </label>
+                        {{ form.email }}
+                        {% if form.email.errors %}
+                            <div class="field-error">{{ form.email.errors|striptags }}</div>
+                        {% endif %}
+                        <div class="help-text">We'll use this email for all grant-related communications</div>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <label for="{{ form.phone.id_for_label }}" class="form-label">
+                            Phone Number <span class="required-star">*</span>
+                        </label>
+                        {{ form.phone }}
+                        {% if form.phone.errors %}
+                            <div class="field-error">{{ form.phone.errors|striptags }}</div>
+                        {% endif %}
+                        <div class="help-text">Include area code (e.g., 555-123-4567)</div>
+                    </div>
+                    
+                    <div class="col-12">
+                        <label for="{{ form.address.id_for_label }}" class="form-label">
+                            Mailing Address <span class="required-star">*</span>
+                        </label>
+                        {{ form.address }}
+                        {% if form.address.errors %}
+                            <div class="field-error">{{ form.address.errors|striptags }}</div>
+                        {% endif %}
+                        <div class="help-text">Complete mailing address including street, city, state, and ZIP code</div>
+                    </div>
+                </div>
+            </div>
+            <div class="wizard-nav">
+                <span></span>
+                <button type="button" class="btn btn-next" id="next-btn-step1" onclick="simpleNext();">Next</button>
+                <script>
+                function simpleNext() {
+                    var step1 = document.getElementById('step-1');
+                    var step2 = document.getElementById('step-2');
+                    
+                    if (step1) {
+                        step1.style.display = 'none';
+                        step1.classList.remove('active');
+                    }
+                    
+                    if (step2) {
+                        step2.style.display = 'block';
+                        step2.style.visibility = 'visible';
+                        step2.classList.add('active');
+                        step2.scrollIntoView();
+                    }
+                }
+                </script>
+            </div>
+            </div>
+
+            <!-- Step 2: Project -->
+            <div class="form-step segment-violet" data-step="2" id="step-2" role="tabpanel" aria-labelledby="tab-2">
+            <div class="form-section">
+                <h3 class="section-title">
+                    <i class="fas fa-lightbulb"></i>Project Information
+                </h3>
+                
+                <div class="row">
+                    <div class="col-12">
+                        <label for="{{ form.project_title.id_for_label }}" class="form-label">
+                            Project Title <span class="required-star">*</span>
+                        </label>
+                        {{ form.project_title }}
+                        {% if form.project_title.errors %}
+                            <div class="field-error">{{ form.project_title.errors|striptags }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <label for="{{ form.project_category.id_for_label }}" class="form-label">
+                            Project Category <span class="required-star">*</span>
+                        </label>
+                        {{ form.project_category }}
+                        {% if form.project_category.errors %}
+                            <div class="field-error">{{ form.project_category.errors|striptags }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="col-12">
+                        <label for="{{ form.project_description.id_for_label }}" class="form-label">
+                            Detailed Project Description <span class="required-star">*</span>
+                        </label>
+                        {{ form.project_description }}
+                        {% if form.project_description.errors %}
+                            <div class="field-error">{{ form.project_description.errors|striptags }}</div>
+                        {% endif %}
+                        <div class="help-text">Provide a detailed description of your project. What problem does it solve? How will it work? (Minimum 200 words)</div>
+                    </div>
+                    
+                    <div class="col-12">
+                        <label for="{{ form.project_goals.id_for_label }}" class="form-label">
+                            Project Goals & Objectives <span class="required-star">*</span>
+                        </label>
+                        {{ form.project_goals }}
+                        {% if form.project_goals.errors %}
+                            <div class="field-error">{{ form.project_goals.errors|striptags }}</div>
+                        {% endif %}
+                        <div class="help-text">What specific goals and objectives do you hope to achieve?</div>
+                    </div>
+                    
+                    <div class="col-12">
+                        <label for="{{ form.target_beneficiaries.id_for_label }}" class="form-label">
+                            Target Beneficiaries <span class="required-star">*</span>
+                        </label>
+                        {{ form.target_beneficiaries }}
+                        {% if form.target_beneficiaries.errors %}
+                            <div class="field-error">{{ form.target_beneficiaries.errors|striptags }}</div>
+                        {% endif %}
+                        <div class="help-text">Who will benefit from this project? How many people will be impacted?</div>
+                    </div>
+                    
+                    <div class="col-12">
+                        <label for="{{ form.expected_impact.id_for_label }}" class="form-label">
+                            Expected Impact <span class="required-star">*</span>
+                        </label>
+                        {{ form.expected_impact }}
+                        {% if form.expected_impact.errors %}
+                            <div class="field-error">{{ form.expected_impact.errors|striptags }}</div>
+                        {% endif %}
+                        <div class="help-text">How will you measure the success of your project? What metrics will you use?</div>
+                    </div>
+                </div>
+            </div>
+            <div class="wizard-nav">
+                <button type="button" class="btn btn-back" data-back onclick="goToPrevious(2);">Back</button>
+                <button type="button" class="btn btn-next" data-next onclick="goToNext(2);">Next</button>
+                <script>
+                function goToNext(currentStep) {
+                    var current = document.getElementById('step-' + currentStep);
+                    var next = document.getElementById('step-' + (currentStep + 1));
+                    if (current) {
+                        current.style.display = 'none';
+                        current.classList.remove('active');
+                    }
+                    if (next) {
+                        next.style.display = 'block';
+                        next.style.visibility = 'visible';
+                        next.classList.add('active');
+                        next.scrollIntoView();
+                    }
+                }
+                function goToPrevious(currentStep) {
+                    var current = document.getElementById('step-' + currentStep);
+                    var prev = document.getElementById('step-' + (currentStep - 1));
+                    if (current) {
+                        current.style.display = 'none';
+                        current.classList.remove('active');
+                    }
+                    if (prev) {
+                        prev.style.display = 'block';
+                        prev.style.visibility = 'visible';
+                        prev.classList.add('active');
+                        prev.scrollIntoView();
+                    }
+                }
+                </script>
+            </div>
+            </div>
+
+            <!-- Step 3: Financial -->
+            <div class="form-step segment-emerald" data-step="3" id="step-3" role="tabpanel" aria-labelledby="tab-3">
+            <div class="form-section">
+                <h3 class="section-title">
+                    <i class="fas fa-dollar-sign"></i>Financial Information
+                </h3>
+                
+                <div class="row">
+                    <div class="col-md-6">
+                        <label for="{{ form.amount_requested.id_for_label }}" class="form-label">
+                            Grant Amount Requested <span class="required-star">*</span>
+                        </label>
+                        {{ form.amount_requested }}
+                        {% if form.amount_requested.errors %}
+                            <div class="field-error">{{ form.amount_requested.errors|striptags }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="col-12">
+                        <label for="{{ form.budget_breakdown.id_for_label }}" class="form-label">
+                            Budget Breakdown <span class="required-star">*</span>
+                        </label>
+                        {{ form.budget_breakdown }}
+                        {% if form.budget_breakdown.errors %}
+                            <div class="field-error">{{ form.budget_breakdown.errors|striptags }}</div>
+                        {% endif %}
+                        <div class="help-text">Provide a detailed breakdown:
+                        <br>• Personnel: $X,XXX
+                        <br>• Equipment: $X,XXX  
+                        <br>• Materials: $X,XXX
+                        <br>• Other: $X,XXX</div>
+                    </div>
+                    
+                    <div class="col-12">
+                        <label for="{{ form.other_funding.id_for_label }}" class="form-label">
+                            Other Funding Sources
+                        </label>
+                        {{ form.other_funding }}
+                        {% if form.other_funding.errors %}
+                            <div class="field-error">{{ form.other_funding.errors|striptags }}</div>
+                        {% endif %}
+                        <div class="help-text">List any other grants, donations, or funding sources (current or pending)</div>
+                    </div>
+                </div>
+            </div>
+            <div class="wizard-nav">
+                <button type="button" class="btn btn-back" data-back onclick="goToPrevious(3);">Back</button>
+                <button type="button" class="btn btn-next" data-next onclick="goToNext(3);">Next</button>
+            </div>
+            </div>
+
+            <!-- Step 4: Timeline -->
+            <div class="form-step segment-amber" data-step="4" id="step-4" role="tabpanel" aria-labelledby="tab-4">
+            <div class="form-section">
+                <h3 class="section-title">
+                    <i class="fas fa-calendar"></i>Timeline & Implementation
+                </h3>
+                
+                <div class="row">
+                    <div class="col-md-6">
+                        <label for="{{ form.project_start_date.id_for_label }}" class="form-label">
+                            Proposed Start Date <span class="required-star">*</span>
+                        </label>
+                        {{ form.project_start_date }}
+                        {% if form.project_start_date.errors %}
+                            <div class="field-error">{{ form.project_start_date.errors|striptags }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <label for="{{ form.project_duration.id_for_label }}" class="form-label">
+                            Project Duration <span class="required-star">*</span>
+                        </label>
+                        {{ form.project_duration }}
+                        {% if form.project_duration.errors %}
+                            <div class="field-error">{{ form.project_duration.errors|striptags }}</div>
+                        {% endif %}
+                        <div class="help-text">e.g., 6 months, 1 year, 18 months</div>
+                    </div>
+                    
+                    <div class="col-12">
+                        <label for="{{ form.implementation_plan.id_for_label }}" class="form-label">
+                            Implementation Plan <span class="required-star">*</span>
+                        </label>
+                        {{ form.implementation_plan }}
+                        {% if form.implementation_plan.errors %}
+                            <div class="field-error">{{ form.implementation_plan.errors|striptags }}</div>
+                        {% endif %}
+                        <div class="help-text">Describe your step-by-step plan to implement this project. Include timeline and milestones.</div>
+                    </div>
+                </div>
+            </div>
+            <div class="wizard-nav">
+                <button type="button" class="btn btn-back" data-back onclick="goToPrevious(4);">Back</button>
+                <button type="button" class="btn btn-next" data-next onclick="goToNext(4);">Next</button>
+            </div>
+            </div>
+
+            <!-- Step 5: Experience -->
+            <div class="form-step segment-indigo" data-step="5" id="step-5" role="tabpanel" aria-labelledby="tab-5">
+            <div class="form-section">
+                <h3 class="section-title">
+                    <i class="fas fa-award"></i>Experience & Qualifications
+                </h3>
+                
+                <div class="row">
+                    <div class="col-12">
+                        <label for="{{ form.experience.id_for_label }}" class="form-label">
+                            Relevant Experience <span class="required-star">*</span>
+                        </label>
+                        {{ form.experience }}
+                        {% if form.experience.errors %}
+                            <div class="field-error">{{ form.experience.errors|striptags }}</div>
+                        {% endif %}
+                        <div class="help-text">Describe your relevant experience and qualifications for this project</div>
+                    </div>
+                    
+                    <div class="col-12">
+                        <label for="{{ form.team_members.id_for_label }}" class="form-label">
+                            Key Team Members
+                        </label>
+                        {{ form.team_members }}
+                        {% if form.team_members.errors %}
+                            <div class="field-error">{{ form.team_members.errors|striptags }}</div>
+                        {% endif %}
+                        <div class="help-text">List key team members and their roles/qualifications (optional)</div>
+                    </div>
+                </div>
+            </div>
+            <div class="wizard-nav">
+                <button type="button" class="btn btn-back" data-back onclick="goToPrevious(5);">Back</button>
+                <button type="button" class="btn btn-next" data-next onclick="goToNext(5);">Next</button>
+            </div>
+            </div>
+
+            <!-- Step 6: Additional & Confirm -->
+            <div class="form-step segment-slate" data-step="6" id="step-6" role="tabpanel" aria-labelledby="tab-6">
+            <div class="form-section">
+                <h3 class="section-title">
+                    <i class="fas fa-info-circle"></i>Additional Information (Optional)
+                </h3>
+                
+                <div class="row">
+                    <div class="col-12">
+                        <label for="{{ form.potential_challenges.id_for_label }}" class="form-label">
+                            Potential Challenges
+                        </label>
+                        {{ form.potential_challenges }}
+                        {% if form.potential_challenges.errors %}
+                            <div class="field-error">{{ form.potential_challenges.errors|striptags }}</div>
+                        {% endif %}
+                        <div class="help-text">What challenges do you anticipate and how will you address them? (optional)</div>
+                    </div>
+                    
+                    <div class="col-12">
+                        <label for="{{ form.sustainability_plan.id_for_label }}" class="form-label">
+                            Sustainability Plan
+                        </label>
+                        {{ form.sustainability_plan }}
+                        {% if form.sustainability_plan.errors %}
+                            <div class="field-error">{{ form.sustainability_plan.errors|striptags }}</div>
+                        {% endif %}
+                        <div class="help-text">How will the project continue or have lasting impact after the grant period? (optional)</div>
+                    </div>
+                    
+                    <div class="col-12">
+                        <label for="{{ form.additional_info.id_for_label }}" class="form-label">
+                            Additional Information
+                        </label>
+                        {{ form.additional_info }}
+                        {% if form.additional_info.errors %}
+                            <div class="field-error">{{ form.additional_info.errors|striptags }}</div>
+                        {% endif %}
+                        <div class="help-text">Any additional information you'd like to share (optional)</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Confirmation Section -->
+            <div class="confirmation-section">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" required id="confirmation">
+                    <label class="form-check-label" for="confirmation">
+                        I confirm that all information provided is accurate and complete.
+                    </label>
+                </div>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="wizard-nav">
+                <button type="button" class="btn btn-back" data-back onclick="goToPrevious(6);">Back</button>
+                <button type="submit" class="btn btn-submit" data-submit id="submitBtn" disabled>
+                    <i class="fas fa-paper-plane me-2"></i>Submit Application
+                </button>
+                <script>
+                // Enable submit button when confirmation is checked
+                document.addEventListener('DOMContentLoaded', function() {
+                    const confirmCheckbox = document.getElementById('confirmation');
+                    const submitBtn = document.getElementById('submitBtn');
+                    
+                    if (confirmCheckbox && submitBtn) {
+                        confirmCheckbox.addEventListener('change', function() {
+                            submitBtn.disabled = !this.checked;
+                            if (this.checked) {
+                                submitBtn.style.backgroundColor = '#28a745';
+                                submitBtn.style.opacity = '1';
+                            } else {
+                                submitBtn.style.backgroundColor = '#6c757d';
+                                submitBtn.style.opacity = '0.6';
+                            }
+                        });
+                        
+                        // Handle form submission
+                        submitBtn.addEventListener('click', function(e) {
+                            e.preventDefault();
+                            
+                            if (!confirmCheckbox.checked) {
+                                return false;
+                            }
+                            
+                            // Show loading state
+                            submitBtn.disabled = true;
+                            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Submitting...';
+                            
+                            // Get the form and submit it
+                            const form = document.getElementById('grantApplicationForm');
+                            
+                            // Just submit the form directly
+                            form.submit();
+                        });
+                    }
+                });
+                </script>
+                </button>
+            </div>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'assets/js/enhanced-interactions.js' %}"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize the multi-step form
+    const steps = document.querySelectorAll('.form-step');
+    const nextButtons = document.querySelectorAll('[data-next]');
+    const backButtons = document.querySelectorAll('[data-back]');
+    const progressBar = document.querySelector('.progress-bar');
+    const stepper = document.getElementById('wizardStepper');
+    
+    let currentStep = 0;
+    
+    // Show first step only
+    if (steps.length > 0) {
+        steps.forEach((step, index) => {
+            step.style.display = index === 0 ? 'block' : 'none';
+        });
+    }
+    
+    // Handle next button clicks
+    nextButtons.forEach((btn, index) => {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            if (currentStep < steps.length - 1) {
+                steps[currentStep].style.display = 'none';
+                steps[currentStep].classList.remove('active');
+                currentStep++;
+                steps[currentStep].style.display = 'block';
+                steps[currentStep].classList.add('active');
+                
+                // Update progress bar
+                if (progressBar) {
+                    const percent = (currentStep / (steps.length - 1)) * 100;
+                    progressBar.style.width = percent + '%';
+                    progressBar.setAttribute('aria-valuenow', percent);
+                }
+                
+                // Update stepper
+                if (stepper) {
+                    const stepperItems = stepper.querySelectorAll('li');
+                    stepperItems.forEach((item, idx) => {
+                        item.classList.toggle('active', idx === currentStep);
+                        item.classList.toggle('completed', idx < currentStep);
+                    });
+                }
+                
+                // Scroll to new step
+                steps[currentStep].scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        });
+    });
+    
+    // Handle back button clicks
+    backButtons.forEach((btn) => {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            if (currentStep > 0) {
+                steps[currentStep].style.display = 'none';
+                steps[currentStep].classList.remove('active');
+                currentStep--;
+                steps[currentStep].style.display = 'block';
+                steps[currentStep].classList.add('active');
+                
+                // Update progress bar
+                if (progressBar) {
+                    const percent = (currentStep / (steps.length - 1)) * 100;
+                    progressBar.style.width = percent + '%';
+                    progressBar.setAttribute('aria-valuenow', percent);
+                }
+                
+                // Update stepper
+                if (stepper) {
+                    const stepperItems = stepper.querySelectorAll('li');
+                    stepperItems.forEach((item, idx) => {
+                        item.classList.toggle('active', idx === currentStep);
+                        item.classList.toggle('completed', idx < currentStep);
+                    });
+                }
+                
+                // Scroll to current step
+                steps[currentStep].scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        });
+    });
+});
+
+// Global function for simpleNext (referenced in template)
+window.simpleNext = function() {
+    const step1 = document.getElementById('step-1');
+    const step2 = document.getElementById('step-2');
+    
+    if (step1) {
+        step1.style.display = 'none';
+        step1.classList.remove('active');
+    }
+    
+    if (step2) {
+        step2.style.display = 'block';
+        step2.style.visibility = 'visible';
+        step2.classList.add('active');
+        step2.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+};
+</script>
+{% endblock %}
+</script>

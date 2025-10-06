@@ -1,0 +1,64 @@
+{% extends "email/base_email.html" %}
+
+{% block title %}Welcome to Dave Johnson Foundation{% endblock %}
+
+{% block header_title %}Welcome to Our Community!{% endblock %}
+{% block header_subtitle %}Your grant application journey begins here{% endblock %}
+
+{% block content %}
+<div class="greeting">
+    Dear {{ user.first_name|default:user.username }},
+</div>
+
+<div class="message">
+    <p>Welcome to the <strong>Dave Johnson Foundation</strong> grant platform! We're thrilled to have you join our community of changemakers and visionaries.</p>
+    
+    <p>Your account has been successfully created, and you now have access to our comprehensive grant application system where you can:</p>
+    
+    <ul style="margin: 20px 0; padding-left: 30px; line-height: 2;">
+        <li>🎯 Apply for grants ranging from <strong>$10,000 to $30,000</strong></li>
+        <li>📊 Track your application status in real-time</li>
+        <li>📧 Receive updates on your grant progress</li>
+        <li>💡 Access our support resources and guidelines</li>
+        <li>🤝 Connect with our support team when needed</li>
+    </ul>
+</div>
+
+<div class="info-box">
+    <h3 style="color: #667eea; margin-bottom: 15px;">🚀 Ready to Get Started?</h3>
+    <p><strong>Next Steps:</strong></p>
+    <ol style="margin: 10px 0; padding-left: 20px; line-height: 1.8;">
+        <li>Log in to your account using the button below</li>
+        <li>Complete your grant application with detailed project information</li>
+        <li>Upload all required documentation</li>
+        <li>Submit your application for review</li>
+        <li>Track your progress through our review process</li>
+    </ol>
+</div>
+
+<div style="text-align: center; margin: 30px 0;">
+    <a href="http://127.0.0.1:8000/accounts/login/" class="button">
+        Access Your Dashboard
+    </a>
+</div>
+
+<div class="message">
+    <p><strong>Our Review Process:</strong><br>
+    Applications are reviewed monthly by our grant committee. The typical review process takes 2-4 weeks, and we'll keep you updated at every step.</p>
+    
+    <p><strong>Need Help?</strong><br>
+    Our support team is here to assist you throughout your application journey. Don't hesitate to reach out if you have any questions or need guidance.</p>
+    
+    <p>Thank you for choosing the David Johnson Foundation. Together, we're building stronger communities and creating lasting positive impact!</p>
+</div>
+
+<div style="text-align: center; margin: 30px 0; padding: 20px; background-color: #f8f9fa; border-radius: 10px;">
+    <p style="font-weight: 600; color: #667eea; margin-bottom: 10px;">💡 Pro Tip</p>
+    <p>Prepare all your project documents in advance to streamline your application process. Check our guidelines for a complete list of required documentation.</p>
+</div>
+
+<div class="message">
+    <p>Best regards,<br>
+    <strong>The Dave Johnson Foundation Team</strong></p>
+</div>
+{% endblock %}

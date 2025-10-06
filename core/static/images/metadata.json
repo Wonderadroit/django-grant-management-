@@ -1,0 +1,89 @@
+{
+  "hero.jpg": {
+    "original": {
+      "width": 1400,
+      "height": 933
+    },
+    "generated": [
+      {
+        "file": "hero-1000.jpg",
+        "width": 1000,
+        "height": 666
+      },
+      {
+        "file": "hero-1000.webp",
+        "width": 1000,
+        "height": 666,
+        "webp": true
+      },
+      {
+        "file": "hero-800.jpg",
+        "width": 800,
+        "height": 533
+      },
+      {
+        "file": "hero-800.webp",
+        "width": 800,
+        "height": 533,
+        "webp": true
+      }
+    ]
+  },
+  "testimonial1.jpg": {
+    "original": {
+      "width": 800,
+      "height": 1200
+    },
+    "generated": [
+      {
+        "file": "testimonial1-400.jpg",
+        "width": 400,
+        "height": 600
+      },
+      {
+        "file": "testimonial1-400.webp",
+        "width": 400,
+        "height": 600,
+        "webp": true
+      }
+    ]
+  },
+  "testimonial2.jpg": {
+    "original": {
+      "width": 800,
+      "height": 1199
+    },
+    "generated": [
+      {
+        "file": "testimonial2-400.jpg",
+        "width": 400,
+        "height": 599
+      },
+      {
+        "file": "testimonial2-400.webp",
+        "width": 400,
+        "height": 599,
+        "webp": true
+      }
+    ]
+  },
+  "testimonial3.jpg": {
+    "original": {
+      "width": 800,
+      "height": 1200
+    },
+    "generated": [
+      {
+        "file": "testimonial3-400.jpg",
+        "width": 400,
+        "height": 600
+      },
+      {
+        "file": "testimonial3-400.webp",
+        "width": 400,
+        "height": 600,
+        "webp": true
+      }
+    ]
+  }
+}

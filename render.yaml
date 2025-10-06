@@ -1,0 +1,30 @@
+databases:
+  - name: django-grant-db
+    databaseName: django_grant_db
+    user: django_grant_user
+
+services:
+  - type: web
+    name: django-grant-app
+    runtime: python3
+    buildCommand: "./build.sh"
+    startCommand: "gunicorn core.wsgi:application"
+    plan: free
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: django-grant-db
+          property: connectionString
+      - key: SECRET_KEY
+        generateValue: true
+      - key: WEB_CONCURRENCY
+        value: 4
+      - key: DEBUG
+        value: false
+      - key: ALLOWED_HOSTS
+        value: "*"
+      - key: EMAIL_BACKEND
+        value: "django.core.mail.backends.smtp.EmailBackend"
+      - key: DEFAULT_FROM_EMAIL
+        value: "Dave Johnson Foundation <grantdavejohnsonfoundation@gmail.com>"
+    healthCheckPath: /
