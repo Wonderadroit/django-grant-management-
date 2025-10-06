@@ -2,6 +2,7 @@ databases:
   - name: django-grant-db
     databaseName: django_grant_db
     user: django_grant_user
+    plan: free
 
 services:
   - type: web
