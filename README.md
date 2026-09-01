@@ -1,16 +1,10 @@
 # Django Grant Management
 
-A Django-based grant-management project for organizing grant-related workflows and information.
+A Django web-application project exploring **backend development, application structure, and grant-management workflows**.
 
 ## Overview
 
-This repository is part of the author's development portfolio and explores building web applications with the Django ecosystem.
-
-## Project status
-
-🚧 **Development / learning project**
-
-The repository is not currently documented as a production-ready service. Setup and deployment instructions will be expanded as the implementation evolves.
+The project is part of Wonderadroit's public engineering portfolio and demonstrates practical work with the Django ecosystem.
 
 ## Technology
 
@@ -18,13 +12,31 @@ The repository is not currently documented as a production-ready service. Setup 
 - Django
 - Web application development
 
+## Project status
+
+🚧 **Development / learning project**
+
+The repository is not currently documented as a production-ready service. Setup, testing, and deployment documentation will be expanded as the implementation matures.
+
+## Engineering focus
+
+The project provides a foundation for demonstrating:
+
+- Django application organization
+- Backend workflow design
+- Data-driven web application development
+- Maintainable project structure
+- Testing and deployment practices as the project evolves
+
 ## Getting started
 
-The current repository does not contain a complete setup guide. Check the project source and dependency configuration before attempting to run it.
+The current repository does not yet contain a complete reproducible setup guide. Review the source and dependency configuration before attempting to run it.
+
+A future release should document the supported Python/Django versions, environment configuration, database setup, test commands, and deployment process.
 
 ## Contributing
 
-Issues and pull requests are welcome when they include a clear description of the proposed change.
+Issues and pull requests should include a clear description of the problem or proposed change. Contributions should avoid committing credentials, local environment files, or other sensitive information.
 
 ## License
 
