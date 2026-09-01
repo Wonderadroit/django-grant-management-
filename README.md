@@ -1,42 +1,63 @@
 # Django Grant Management
 
-A Django web-application project exploring **backend development, application structure, and grant-management workflows**.
+A focused Django backend for managing grant opportunities and applicant submissions.
 
-## Overview
+## What it demonstrates
 
-The project is part of Wonderadroit's public engineering portfolio and demonstrates practical work with the Django ecosystem.
+- Django project structure and configuration
+- Relational domain modelling with `Grant` and `Application`
+- Django admin integration
+- A small JSON API for open grants
+- Automated tests
+- Database migrations
+- GitHub Actions CI across supported Python versions
 
-## Technology
+## Architecture
 
-- Python
-- Django
-- Web application development
+```text
+Django project
+├── grant_management/   # settings, URLs, WSGI entry point
+└── grants/             # domain models, API view, admin, tests
+```
 
-## Project status
+### Core domain
 
-🚧 **Development / learning project**
+- **Grant** — a funding opportunity with description, deadline and open/closed state.
+- **Application** — an applicant submission linked to a grant with an explicit workflow status.
 
-The repository is not currently documented as a production-ready service. Setup, testing, and deployment documentation will be expanded as the implementation matures.
+## Local setup
 
-## Engineering focus
+```bash
+python -m venv .venv
+source .venv/bin/activate
+python -m pip install -r requirements.txt
+python manage.py migrate
+python manage.py test
+python manage.py runserver
+```
 
-The project provides a foundation for demonstrating:
+On Windows, activate the environment with `.venv\\Scripts\\activate`.
 
-- Django application organization
-- Backend workflow design
-- Data-driven web application development
-- Maintainable project structure
-- Testing and deployment practices as the project evolves
+The grant listing endpoint is available at `/api/grants/` when the development server is running.
 
-## Getting started
+## CI
 
-The current repository does not yet contain a complete reproducible setup guide. Review the source and dependency configuration before attempting to run it.
+GitHub Actions runs the Django test suite on Python **3.11, 3.12 and 3.13** and checks that migrations are in sync. This follows the standard GitHub Actions model of building/testing changes automatically on repository events. citeturn0search3
 
-A future release should document the supported Python/Django versions, environment configuration, database setup, test commands, and deployment process.
+## Security notes
 
-## Contributing
+- Do not commit real secrets or production credentials.
+- The development `SECRET_KEY` in source is intentionally non-production and must be replaced through environment configuration before deployment.
+- `DEBUG` must be disabled in production.
+- Authentication/authorization for applicant and administrative workflows is a planned production concern and is not claimed to be complete yet.
 
-Issues and pull requests should include a clear description of the problem or proposed change. Contributions should avoid committing credentials, local environment files, or other sensitive information.
+## Status
+
+**Working portfolio implementation — not production-ready.**
+
+The current release establishes the domain model, API boundary, migrations, admin integration and automated test baseline. Future work should add authentication/authorization, validation rules, applicant-facing forms, production configuration, stronger security controls and deployment documentation.
+
+See [`docs/PROJECT_STATUS.md`](docs/PROJECT_STATUS.md) for the implementation roadmap.
 
 ## License
 
